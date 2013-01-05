@@ -6,4 +6,8 @@ class Calculator
   def ac
     @display.update("0")
   end
+
+  def n1
+    @display.update("1")
+  end
 end

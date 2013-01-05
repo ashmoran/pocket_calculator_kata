@@ -20,4 +20,15 @@ describe Calculator do
       expect { calculator.ac }.to change { display_contents }.from(nil).to("0")
     }
   end
+
+  describe "typing numbers" do
+    before(:each) do
+      calculator.ac
+    end
+
+    example do
+      calculator.n1
+      expect(display_contents).to be == "1"
+    end
+  end
 end
