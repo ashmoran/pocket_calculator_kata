@@ -352,6 +352,16 @@ describe Calculator do
       example do
         press_digits 1, 2, 3
         calculator.plus
+        press_digit 6
+        calculator.plus_minus
+        press_digit 7
+        calculator.equals
+        expect(display_contents).to be == "56"
+      end
+
+      example do
+        press_digits 1, 2, 3
+        calculator.plus
         calculator.plus_minus
         press_digits 7
         calculator.equals
