@@ -368,5 +368,18 @@ describe Calculator do
         expect(display_contents).to be == "130"
       end
     end
+
+    describe "memory" do
+      example do
+        press_digits 1, 2, 3
+        calculator.m_plus
+        calculator.plus
+        press_digits 4, 5, 6
+        calculator.ac
+        calculator.mr
+
+        expect(display_contents).to be == "123"
+      end
+    end
   end
 end

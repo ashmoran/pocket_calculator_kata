@@ -129,6 +129,15 @@ class Calculator
     handle_operation(:do_nothing)
   end
 
+  def m_plus
+    @memory = @digits.dup
+  end
+
+  def mr
+    @digits = @memory
+    update_display
+  end
+
   private
 
   def calculate_answer
