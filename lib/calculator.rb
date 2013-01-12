@@ -4,8 +4,11 @@ require 'facets/enumerable'
 class Calculator
   def initialize(dependencies)
     @display = dependencies.fetch(:display)
-    @digits = [ ]
+
+    @digits                   = [ ]
     @intermediate_calculation = nil
+    @next_operation           = :do_nothing
+
     super()
   end
 
@@ -50,23 +53,23 @@ class Calculator
   end
 
   def plus
-    handle_operation(:+)
+    handle_operation(:do_plus)
   end
 
   def minus
-    handle_operation(:-)
+    handle_operation(:do_minus)
   end
 
   def times
-    handle_operation(:*)
+    handle_operation(:do_times)
   end
 
   def divide_by
-    handle_operation(:/)
+    handle_operation(:do_divide_by)
   end
 
   def equals
-    handle_operation(nil)
+    handle_operation(:do_nothing)
   end
 
   private
@@ -79,19 +82,7 @@ class Calculator
   end
 
   def calculate_answer
-    @intermediate_calculation =
-      case @next_operation
-      when :+
-        @intermediate_calculation + current_number
-      when :-
-        @intermediate_calculation - current_number
-      when :*
-        @intermediate_calculation * current_number
-      when :/
-        @intermediate_calculation / current_number
-      else
-        current_number
-      end
+    @intermediate_calculation = send(@next_operation)
     display_intermediate_calculation
   end
 
@@ -121,5 +112,27 @@ class Calculator
 
   def current_number
     @digits.reverse.map_with_index { |digit, index| digit.to_i * 10**index }.sum
+  end
+
+  # Operation implementations
+
+  def do_plus
+    @intermediate_calculation + current_number
+  end
+
+  def do_minus
+    @intermediate_calculation - current_number
+  end
+
+  def do_times
+    @intermediate_calculation * current_number
+  end
+
+  def do_divide_by
+    @intermediate_calculation / current_number
+  end
+
+  def do_nothing
+    current_number
   end
 end
