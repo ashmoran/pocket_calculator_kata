@@ -116,6 +116,15 @@ describe Calculator do
           calculator.plus_minus
           expect(display_contents).to be == "123"
         end
+
+        example do
+          press_digits 1, 2, 3
+          calculator.plus
+          calculator.plus_minus
+          expect(display_contents).to be == "-123"
+          press_digit 7
+          expect(display_contents).to be == "7"
+        end
       end
 
       describe "changing your mind about an operation" do
@@ -338,6 +347,15 @@ describe Calculator do
         calculator.plus_minus
         calculator.equals
         expect(display_contents).to be == "56"
+      end
+
+      example do
+        press_digits 1, 2, 3
+        calculator.plus
+        calculator.plus_minus
+        press_digits 7
+        calculator.equals
+        expect(display_contents).to be == "130"
       end
     end
   end
