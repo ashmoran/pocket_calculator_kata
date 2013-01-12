@@ -76,6 +76,7 @@ class Calculator
 
   def backspace
     @digits.pop
+    add_digit("0") if @digits.empty?
     update_display
   end
 

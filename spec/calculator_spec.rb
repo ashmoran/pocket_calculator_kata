@@ -118,6 +118,16 @@ describe Calculator do
           calculator.backspace
           expect(display_contents).to be == "12"
         end
+
+        example do
+          press_digits 1, 2, 3
+
+          3.times do
+            calculator.backspace
+          end
+
+          expect(display_contents).to be == "0"
+        end
       end
     end
 
