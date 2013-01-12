@@ -81,6 +81,12 @@ class Calculator
     update_display
   end
 
+  def c
+    clear_display
+    add_digit("0")
+    update_display
+  end
+
   (0..9).each do |digit|
     define_method(:"n#{digit}") do
       digit_pressed(digit.to_s)

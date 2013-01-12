@@ -162,6 +162,17 @@ describe Calculator do
           expect(display_contents).to be == "135"
         end
       end
+
+      describe "clear" do
+        example do
+          press_digits 1, 2, 3
+          calculator.plus
+          press_digits 4, 5, 6
+          calculator.c
+
+          expect(display_contents).to be == "0"
+        end
+      end
     end
 
     describe "addition" do
