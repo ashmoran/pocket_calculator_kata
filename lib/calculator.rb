@@ -57,6 +57,7 @@ class Calculator
 
   def equals
     calculate_answer
+    number_completed
     update_display
   end
 

@@ -53,6 +53,15 @@ describe Calculator do
       expect(display_contents).to be == "1234567890"
     end
 
+    describe "equals" do
+      example do
+        press_digits 1, 2, 3
+        calculator.equals
+        press_digits 4, 5, 6
+        expect(display_contents).to be == "456"
+      end
+    end
+
     describe "addition" do
       example do
         press_digits 1, 2, 3
@@ -89,6 +98,19 @@ describe Calculator do
 
       expect(display_contents).to be == "579"
 
+      press_digits 7, 8, 9
+      calculator.equals
+
+      expect(display_contents).to be == "1368"
+    end
+
+    example do
+      pending "This will be easier after doing subtraction"
+      press_digits 1, 2, 3
+      calculator.plus
+      press_digits 4, 5, 6
+      calculator.equals
+      calculator.plus
       press_digits 7, 8, 9
       calculator.equals
 
