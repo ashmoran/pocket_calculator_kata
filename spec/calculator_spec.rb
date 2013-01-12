@@ -330,6 +330,15 @@ describe Calculator do
         calculator.equals
         expect(display_contents).to be == "-123"
       end
+
+      example do
+        press_digits 1, 2, 3
+        calculator.plus
+        press_digits 6, 7
+        calculator.plus_minus
+        calculator.equals
+        expect(display_contents).to be == "56"
+      end
     end
   end
 end
