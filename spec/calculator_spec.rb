@@ -166,4 +166,15 @@ describe Calculator do
       expect(display_contents).to be == "12"
     end
   end
+
+  describe "multiplication" do
+    example do
+      press_digit 5
+      calculator.times
+      press_digit 6
+      calculator.equals
+
+      expect(display_contents).to be == "30"
+    end
+  end
 end

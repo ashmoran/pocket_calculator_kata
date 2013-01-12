@@ -57,6 +57,10 @@ class Calculator
     handle_operation(:-)
   end
 
+  def times
+    handle_operation(:*)
+  end
+
   def equals
     handle_operation(nil)
   end
@@ -77,6 +81,8 @@ class Calculator
         @intermediate_calculation + current_number
       when :-
         @intermediate_calculation - current_number
+      when :*
+        @intermediate_calculation * current_number
       else
         current_number
       end
