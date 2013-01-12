@@ -82,6 +82,20 @@ describe Calculator do
     end
 
     example do
+      press_digits 1, 2, 3
+      calculator.plus
+      press_digits 4, 5, 6
+      calculator.plus
+
+      expect(display_contents).to be == "579"
+
+      press_digits 7, 8, 9
+      calculator.equals
+
+      expect(display_contents).to be == "1368"
+    end
+
+    example do
       calculator.plus
       press_digits 1, 2, 3
       calculator.equals

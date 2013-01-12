@@ -38,7 +38,7 @@ class Calculator
   end
 
   def ac
-    add_digit("0")
+    n0
     number_completed
     update_display
   end
@@ -50,7 +50,9 @@ class Calculator
   end
 
   def plus
+    calculate_answer
     number_completed
+    update_display
   end
 
   def equals
