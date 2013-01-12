@@ -1,6 +1,10 @@
+require 'spec_helper'
+
 require 'calculator'
 
 describe Calculator do
+  include PocketCalculatorHelper
+
   subject(:calculator) { Calculator.new(display: self) }
 
   def update(contents)
@@ -27,30 +31,23 @@ describe Calculator do
     end
 
     example do
-      calculator.n1
+      press_digit 1
       expect(display_contents).to be == "1"
     end
 
     example do
-      calculator.n1
-      calculator.n2
+      press_digits 1, 2
       expect(display_contents).to be == "12"
     end
 
     example do
-      [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ].each do |digit|
-        calculator.send(:"n#{digit}")
-      end
+      press_digits 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
 
       expect(display_contents).to be == "1234567890"
     end
 
     example do
-      [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ].each do |digit|
-        calculator.send(:"n#{digit}")
-      end
-
-      calculator.n1
+      press_digits 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1
 
       expect(display_contents.length).to be == 10
       expect(display_contents).to be == "1234567890"
