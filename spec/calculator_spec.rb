@@ -109,6 +109,13 @@ describe Calculator do
           calculator.plus_minus
           expect(display_contents).to be == "-123"
         end
+
+        example do
+          press_digits 1, 2, 3
+          calculator.plus_minus
+          calculator.plus_minus
+          expect(display_contents).to be == "123"
+        end
       end
 
       describe "changing your mind about an operation" do

@@ -100,7 +100,12 @@ class Calculator
   end
 
   def plus_minus
-    @digits.unshift("-")
+    if @digits.first == "-"
+      @digits.shift
+    else
+      @digits.unshift("-")
+    end
+
     update_display
   end
 
