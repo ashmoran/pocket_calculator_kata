@@ -51,8 +51,14 @@ class Calculator
 
   def plus
     calculate_answer
+    @next_operation = :+
     number_completed
     update_display
+  end
+
+  def minus
+    @next_operation = :-
+    number_completed
   end
 
   def equals
@@ -64,7 +70,15 @@ class Calculator
   private
 
   def calculate_answer
-    @intermediate_calculation = @intermediate_calculation + current_number
+    @intermediate_calculation =
+      case @next_operation
+      when :+
+        @intermediate_calculation + current_number
+      when :-
+        @intermediate_calculation - current_number
+      else
+        current_number
+      end
     display_intermediate_calculation
   end
 

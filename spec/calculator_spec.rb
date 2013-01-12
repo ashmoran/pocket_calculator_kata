@@ -74,6 +74,19 @@ describe Calculator do
         expect(display_contents).to be == "456"
       end
     end
+
+    describe "subtraction" do
+      example do
+        press_digits 4, 5, 6
+        calculator.minus
+        expect(display_contents).to be == "456"
+
+        press_digit 1
+        expect(display_contents).to be == "1"
+        press_digits 2, 3
+        expect(display_contents).to be == "123"
+      end
+    end
   end
 
   describe "addition" do
@@ -123,6 +136,21 @@ describe Calculator do
       calculator.equals
 
       expect(display_contents).to be == "123"
+    end
+  end
+
+  describe "subtraction" do
+    before(:each) do
+      calculator.ac
+    end
+
+    example do
+      press_digits 4, 5, 6
+      calculator.minus
+      press_digits 1, 2, 3
+      calculator.equals
+
+      expect(display_contents).to be == "333"
     end
   end
 end
