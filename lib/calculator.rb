@@ -1,13 +1,15 @@
 require 'state_machine'
+require 'facets/enumerable'
 
 class Calculator
   def initialize(dependencies)
     @display = dependencies.fetch(:display)
     @digits = [ ]
+    @intermediate_calculation = nil
     super()
   end
 
-  state_machine initial: :waiting_for_new_number do
+  state_machine initial: :building_number do
     event :start_building_number do
       transition :waiting_for_new_number => :building_number
     end
@@ -15,6 +17,8 @@ class Calculator
     event :number_completed do
       transition :building_number => :waiting_for_new_number
     end
+
+    before_transition :building_number => :waiting_for_new_number, do: :store_number
 
     state :waiting_for_new_number do
       def digit_pressed(digit)
@@ -34,8 +38,8 @@ class Calculator
   end
 
   def ac
-    add_digit("0") # change me
-    update_display
+    add_digit("0")
+    number_completed
   end
 
   (0..9).each do |digit|
@@ -48,7 +52,21 @@ class Calculator
     number_completed
   end
 
+  def equals
+    calculate_answer
+    update_display
+  end
+
   private
+
+  def calculate_answer
+    @intermediate_calculation = @intermediate_calculation + current_number
+    display_intermediate_calculation
+  end
+
+  def store_number
+    @intermediate_calculation = current_number
+  end
 
   def clear_display
     @digits = [ ]
@@ -58,7 +76,19 @@ class Calculator
     @digits << digit
   end
 
+  def update_current_number
+    @intermediate_calculation = current_number
+  end
+
   def update_display
     @display.update(@digits.join)
+  end
+
+  def display_intermediate_calculation
+    @digits = @intermediate_calculation.to_s.chars.to_a
+  end
+
+  def current_number
+    @digits.reverse.map_with_index { |digit, index| digit.to_i * 10**index }.sum
   end
 end
