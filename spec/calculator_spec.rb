@@ -152,5 +152,19 @@ describe Calculator do
 
       expect(display_contents).to be == "333"
     end
+
+    example do
+      press_digits 4, 5, 6
+      calculator.minus
+      press_digits 1, 2, 3
+      calculator.minus
+
+      expect(display_contents).to be == "333"
+
+      press_digits 3, 2, 1
+      calculator.equals
+
+      expect(display_contents).to be == "12"
+    end
   end
 end

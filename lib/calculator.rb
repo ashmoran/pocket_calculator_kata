@@ -50,15 +50,11 @@ class Calculator
   end
 
   def plus
-    calculate_answer
-    @next_operation = :+
-    number_completed
-    update_display
+    handle_operation(:+)
   end
 
   def minus
-    @next_operation = :-
-    number_completed
+    handle_operation(:-)
   end
 
   def equals
@@ -68,6 +64,13 @@ class Calculator
   end
 
   private
+
+  def handle_operation(operator)
+    calculate_answer
+    @next_operation = operator
+    number_completed
+    update_display
+  end
 
   def calculate_answer
     @intermediate_calculation =
