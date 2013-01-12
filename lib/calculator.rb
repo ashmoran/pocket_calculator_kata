@@ -178,7 +178,7 @@ class Calculator
   end
 
   def current_number
-    @digits.reverse.map_with_index { |digit, index| digit.to_i * 10**index }.sum
+    @digits.join.to_i
   end
 
   # Operation implementations

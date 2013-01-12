@@ -322,5 +322,14 @@ describe Calculator do
         expect(display_contents).to be == "7"
       end
     end
+
+    describe "negative numbers" do
+      example do
+        press_digits 1, 2, 3
+        calculator.plus_minus
+        calculator.equals
+        expect(display_contents).to be == "-123"
+      end
+    end
   end
 end
