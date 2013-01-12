@@ -12,7 +12,11 @@ class Calculator
     super()
   end
 
-  state_machine initial: :building_number do
+  state_machine initial: :off do
+    event :turn_on do
+      transition :off => :building_number
+    end
+
     event :start_building_number do
       transition :waiting_for_new_number => :building_number
     end
@@ -22,6 +26,12 @@ class Calculator
     end
 
     before_transition :building_number => :waiting_for_new_number, do: :store_number
+
+    state :off do
+      def digit_pressed(digit)
+        # NOOP
+      end
+    end
 
     state :waiting_for_new_number do
       def digit_pressed(digit)
@@ -41,6 +51,7 @@ class Calculator
   end
 
   def ac
+    turn_on
     n0
     number_completed
     update_display
