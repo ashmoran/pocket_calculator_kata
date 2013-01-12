@@ -40,11 +40,22 @@ class Calculator
         update_display
         start_building_number
       end
+
+      def handle_operation(next_operation)
+        @next_operation = next_operation
+      end
     end
 
     state :building_number do
       def digit_pressed(digit)
         add_digit(digit) if @digits.length < 10
+        update_display
+      end
+
+      def handle_operation(next_operation)
+        calculate_answer
+        @next_operation = next_operation
+        number_completed
         update_display
       end
     end
@@ -84,13 +95,6 @@ class Calculator
   end
 
   private
-
-  def handle_operation(next_operation)
-    calculate_answer
-    @next_operation = next_operation
-    number_completed
-    update_display
-  end
 
   def calculate_answer
     @intermediate_calculation = send(@next_operation)
