@@ -25,7 +25,7 @@ describe Calculator do
     }
   end
 
-  describe "typing numbers" do
+  describe "typing" do
     before(:each) do
       calculator.ac
     end
@@ -51,6 +51,29 @@ describe Calculator do
 
       expect(display_contents.length).to be == 10
       expect(display_contents).to be == "1234567890"
+    end
+
+    describe "addition" do
+      example do
+        press_digits 1, 2, 3
+        calculator.plus
+        expect(display_contents).to be == "123"
+
+        press_digit 4
+        expect(display_contents).to be == "4"
+        press_digits 5, 6
+        expect(display_contents).to be == "456"
+      end
+    end
+  end
+
+  describe "addition" do
+    it "works when waiting for a new number" do
+      pending
+    end
+
+    it "works when building a number" do
+      pending
     end
   end
 end

@@ -12,6 +12,10 @@ class Calculator
       transition :waiting_for_new_number => :building_number
     end
 
+    event :number_completed do
+      transition :building_number => :waiting_for_new_number
+    end
+
     state :waiting_for_new_number do
       def digit_pressed(digit)
         clear_display
@@ -38,6 +42,10 @@ class Calculator
     define_method(:"n#{digit}") do
       digit_pressed(digit.to_s)
     end
+  end
+
+  def plus
+    number_completed
   end
 
   private
