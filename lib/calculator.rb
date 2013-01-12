@@ -99,6 +99,11 @@ class Calculator
     end
   end
 
+  def plus_minus
+    @digits.unshift("-")
+    update_display
+  end
+
   def plus
     handle_operation(:do_plus)
   end
