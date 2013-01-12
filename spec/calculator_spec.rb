@@ -118,7 +118,6 @@ describe Calculator do
     end
 
     example do
-      pending "This will be easier after doing subtraction"
       press_digits 1, 2, 3
       calculator.plus
       press_digits 4, 5, 6

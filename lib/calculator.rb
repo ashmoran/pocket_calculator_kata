@@ -58,16 +58,14 @@ class Calculator
   end
 
   def equals
-    calculate_answer
-    number_completed
-    update_display
+    handle_operation(nil)
   end
 
   private
 
-  def handle_operation(operator)
+  def handle_operation(next_operation)
     calculate_answer
-    @next_operation = operator
+    @next_operation = next_operation
     number_completed
     update_display
   end
