@@ -28,6 +28,11 @@ class Calculator
     before_transition :building_number => :waiting_for_new_number, do: :store_number
 
     state :off do
+      def ac
+        turn_on
+        clear_everything
+      end
+
       def digit_pressed(digit)
         # NOOP
       end
@@ -38,6 +43,10 @@ class Calculator
     end
 
     state :waiting_for_new_number do
+      def ac
+        clear_everything
+      end
+
       def digit_pressed(digit)
         clear_display
         add_digit(digit)
@@ -56,6 +65,10 @@ class Calculator
     end
 
     state :building_number do
+      def ac
+        clear_everything
+      end
+
       def digit_pressed(digit)
         add_digit(digit) if @digits.length < 10
         update_display
@@ -72,13 +85,6 @@ class Calculator
         delete_digit
       end
     end
-  end
-
-  def ac
-    turn_on
-    n0
-    number_completed
-    update_display
   end
 
   def c
@@ -126,6 +132,13 @@ class Calculator
 
   def restore_current_number_to_buffer
     @digits
+  end
+
+  def clear_everything
+    clear_display
+    n0
+    number_completed
+    update_display
   end
 
   def clear_display
