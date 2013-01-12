@@ -135,6 +135,16 @@ describe Calculator do
 
         example do
           press_digits 1, 2, 3
+
+          4.times do
+            calculator.backspace
+          end
+
+          expect(display_contents).to be == "0"
+        end
+
+        example do
+          press_digits 1, 2, 3
           calculator.plus
           press_digits 4, 5, 6
           calculator.backspace
