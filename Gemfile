@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'facets'
+gem 'state_machine'
 
 group :development do
 	gem 'rake'

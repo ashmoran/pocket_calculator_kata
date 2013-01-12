@@ -30,5 +30,19 @@ describe Calculator do
       calculator.n1
       expect(display_contents).to be == "1"
     end
+
+    example do
+      calculator.n1
+      calculator.n2
+      expect(display_contents).to be == "12"
+    end
+
+    example do
+      [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ].each do |digit|
+        calculator.send(:"n#{digit}")
+      end
+
+      expect(display_contents).to be == "1234567890"
+    end
   end
 end
