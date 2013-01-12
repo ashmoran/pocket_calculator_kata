@@ -74,6 +74,11 @@ class Calculator
     end
   end
 
+  def backspace
+    @digits.pop
+    update_display
+  end
+
   def plus
     handle_operation(:do_plus)
   end

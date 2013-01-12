@@ -111,6 +111,14 @@ describe Calculator do
           expect(display_contents).to be == "333"
         end
       end
+
+      describe "backspace" do
+        example do
+          press_digits 1, 2, 3
+          calculator.backspace
+          expect(display_contents).to be == "12"
+        end
+      end
     end
 
     describe "addition" do
