@@ -23,7 +23,7 @@ class Calculator
 
     state :building_number do
       def digit_pressed(digit)
-        add_digit(digit)
+        add_digit(digit) if @digits.length < 10
         update_display
       end
     end
