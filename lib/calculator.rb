@@ -40,6 +40,7 @@ class Calculator
   def ac
     add_digit("0")
     number_completed
+    update_display
   end
 
   (0..9).each do |digit|

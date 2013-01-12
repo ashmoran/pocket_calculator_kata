@@ -67,7 +67,7 @@ describe Calculator do
     end
   end
 
-  describe "addition", focus: true do
+  describe "addition" do
     before(:each) do
       calculator.ac
     end
@@ -81,12 +81,12 @@ describe Calculator do
       expect(display_contents).to be == "579"
     end
 
-    it "works when waiting for a new number" do
-      pending
-    end
+    example do
+      calculator.plus
+      press_digits 1, 2, 3
+      calculator.equals
 
-    it "works when building a number" do
-      pending
+      expect(display_contents).to be == "123"
     end
   end
 end
