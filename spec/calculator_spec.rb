@@ -142,6 +142,15 @@ describe Calculator do
 
           expect(display_contents).to be == "168"
         end
+
+        example do
+          press_digits 1, 2, 3
+          calculator.plus
+          calculator.backspace
+          calculator.equals
+
+          expect(display_contents).to be == "135"
+        end
       end
     end
 

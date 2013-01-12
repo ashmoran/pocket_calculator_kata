@@ -31,6 +31,10 @@ class Calculator
       def digit_pressed(digit)
         # NOOP
       end
+
+      def backspace
+        # NOOP
+      end
     end
 
     state :waiting_for_new_number do
@@ -43,6 +47,11 @@ class Calculator
 
       def handle_operation(next_operation)
         @next_operation = next_operation
+      end
+
+      def backspace
+        start_building_number
+        delete_digit
       end
     end
 
@@ -58,6 +67,10 @@ class Calculator
         number_completed
         update_display
       end
+
+      def backspace
+        delete_digit
+      end
     end
   end
 
@@ -72,12 +85,6 @@ class Calculator
     define_method(:"n#{digit}") do
       digit_pressed(digit.to_s)
     end
-  end
-
-  def backspace
-    @digits.pop
-    add_digit("0") if @digits.empty?
-    update_display
   end
 
   def plus
@@ -111,12 +118,22 @@ class Calculator
     @intermediate_calculation = current_number
   end
 
+  def restore_current_number_to_buffer
+    @digits
+  end
+
   def clear_display
     @digits = [ ]
   end
 
   def add_digit(digit)
     @digits << digit
+  end
+
+  def delete_digit
+    @digits.pop
+    add_digit("0") if @digits.empty?
+    update_display
   end
 
   def update_current_number
