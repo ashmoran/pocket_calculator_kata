@@ -26,6 +26,10 @@ describe Calculator do
       }.to_not change { display_contents }.from(nil)
     end
 
+    it "lets you press any button without anything happening" do
+      pending "We're currently cheating by only disabling digits"
+    end
+
     describe "AC" do
       it "turns the calculator on" do
         expect {
