@@ -128,6 +128,16 @@ describe Calculator do
 
           expect(display_contents).to be == "0"
         end
+
+        example do
+          press_digits 1, 2, 3
+          calculator.plus
+          press_digits 4, 5, 6
+          calculator.backspace
+          calculator.equals
+
+          expect(display_contents).to be == "168"
+        end
       end
     end
 
