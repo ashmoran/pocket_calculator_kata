@@ -177,4 +177,15 @@ describe Calculator do
       expect(display_contents).to be == "30"
     end
   end
+
+  describe "division" do
+    example do
+      press_digits 5, 6
+      calculator.divide_by
+      press_digit 8
+      calculator.equals
+
+      expect(display_contents).to be == "7"
+    end
+  end
 end
