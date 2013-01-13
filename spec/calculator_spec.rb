@@ -34,7 +34,7 @@ describe Calculator do
       it "turns the calculator on" do
         expect {
           calculator.ac
-        }.to change { display_contents }.from(nil).to("0")
+        }.to change { display_contents }.from(nil).to("0.")
       end
     end
   end
@@ -47,25 +47,25 @@ describe Calculator do
     describe "typing" do
       example do
         press_digit 1
-        expect(display_contents).to be == "1"
+        expect(display_contents).to be == "1."
       end
 
       example do
         press_digits 1, 2
-        expect(display_contents).to be == "12"
+        expect(display_contents).to be == "12."
       end
 
       example do
         press_digits 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
 
-        expect(display_contents).to be == "1234567890"
+        expect(display_contents).to be == "1234567890."
       end
 
       example do
         press_digits 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1
 
-        expect(display_contents.length).to be == 10
-        expect(display_contents).to be == "1234567890"
+        expect(display_contents.length).to be == 11
+        expect(display_contents).to be == "1234567890."
       end
 
       describe "equals" do
@@ -73,7 +73,7 @@ describe Calculator do
           press_digits 1, 2, 3
           calculator.equals
           press_digits 4, 5, 6
-          expect(display_contents).to be == "456"
+          expect(display_contents).to be == "456."
         end
       end
 
@@ -81,12 +81,12 @@ describe Calculator do
         example do
           press_digits 1, 2, 3
           calculator.plus
-          expect(display_contents).to be == "123"
+          expect(display_contents).to be == "123."
 
           press_digit 4
-          expect(display_contents).to be == "4"
+          expect(display_contents).to be == "4."
           press_digits 5, 6
-          expect(display_contents).to be == "456"
+          expect(display_contents).to be == "456."
         end
       end
 
@@ -94,12 +94,12 @@ describe Calculator do
         example do
           press_digits 4, 5, 6
           calculator.minus
-          expect(display_contents).to be == "456"
+          expect(display_contents).to be == "456."
 
           press_digit 1
-          expect(display_contents).to be == "1"
+          expect(display_contents).to be == "1."
           press_digits 2, 3
-          expect(display_contents).to be == "123"
+          expect(display_contents).to be == "123."
         end
       end
 
@@ -107,23 +107,23 @@ describe Calculator do
         example do
           press_digits 1, 2, 3
           calculator.plus_minus
-          expect(display_contents).to be == "-123"
+          expect(display_contents).to be == "-123."
         end
 
         example do
           press_digits 1, 2, 3
           calculator.plus_minus
           calculator.plus_minus
-          expect(display_contents).to be == "123"
+          expect(display_contents).to be == "123."
         end
 
         example do
           press_digits 1, 2, 3
           calculator.plus
           calculator.plus_minus
-          expect(display_contents).to be == "-123"
+          expect(display_contents).to be == "-123."
           press_digit 7
-          expect(display_contents).to be == "7"
+          expect(display_contents).to be == "7."
         end
       end
 
@@ -136,7 +136,7 @@ describe Calculator do
           press_digits 1, 2, 3
           calculator.equals
 
-          expect(display_contents).to be == "333"
+          expect(display_contents).to be == "333."
         end
       end
 
@@ -144,7 +144,7 @@ describe Calculator do
         example do
           press_digits 1, 2, 3
           calculator.backspace
-          expect(display_contents).to be == "12"
+          expect(display_contents).to be == "12."
         end
 
         example do
@@ -154,7 +154,7 @@ describe Calculator do
             calculator.backspace
           end
 
-          expect(display_contents).to be == "0"
+          expect(display_contents).to be == "0."
         end
 
         example do
@@ -164,7 +164,7 @@ describe Calculator do
             calculator.backspace
           end
 
-          expect(display_contents).to be == "0"
+          expect(display_contents).to be == "0."
         end
 
         example do
@@ -174,7 +174,7 @@ describe Calculator do
           calculator.backspace
           calculator.equals
 
-          expect(display_contents).to be == "168"
+          expect(display_contents).to be == "168."
         end
 
         example do
@@ -183,7 +183,7 @@ describe Calculator do
           calculator.backspace
           calculator.equals
 
-          expect(display_contents).to be == "135"
+          expect(display_contents).to be == "135."
         end
       end
 
@@ -194,7 +194,7 @@ describe Calculator do
           press_digits 4, 5, 6
           calculator.c
 
-          expect(display_contents).to be == "0"
+          expect(display_contents).to be == "0."
         end
 
         example do
@@ -205,7 +205,7 @@ describe Calculator do
           press_digits 1, 2, 3
           calculator.equals
 
-          expect(display_contents).to be == "246"
+          expect(display_contents).to be == "246."
         end
       end
 
@@ -216,7 +216,7 @@ describe Calculator do
           press_digits 4, 5, 6
           calculator.ac
 
-          expect(display_contents).to be == "0"
+          expect(display_contents).to be == "0."
         end
 
         example do
@@ -227,7 +227,7 @@ describe Calculator do
           press_digits 1, 2, 3
           calculator.equals
 
-          expect(display_contents).to be == "123"
+          expect(display_contents).to be == "123."
         end
       end
     end
@@ -243,7 +243,7 @@ describe Calculator do
         press_digits 4, 5, 6
         calculator.equals
 
-        expect(display_contents).to be == "579"
+        expect(display_contents).to be == "579."
       end
 
       example do
@@ -252,12 +252,12 @@ describe Calculator do
         press_digits 4, 5, 6
         calculator.plus
 
-        expect(display_contents).to be == "579"
+        expect(display_contents).to be == "579."
 
         press_digits 7, 8, 9
         calculator.equals
 
-        expect(display_contents).to be == "1368"
+        expect(display_contents).to be == "1368."
       end
 
       example do
@@ -269,7 +269,7 @@ describe Calculator do
         press_digits 7, 8, 9
         calculator.equals
 
-        expect(display_contents).to be == "1368"
+        expect(display_contents).to be == "1368."
       end
 
       example do
@@ -277,7 +277,7 @@ describe Calculator do
         press_digits 1, 2, 3
         calculator.equals
 
-        expect(display_contents).to be == "123"
+        expect(display_contents).to be == "123."
       end
     end
 
@@ -292,7 +292,7 @@ describe Calculator do
         press_digits 1, 2, 3
         calculator.equals
 
-        expect(display_contents).to be == "333"
+        expect(display_contents).to be == "333."
       end
 
       example do
@@ -301,12 +301,12 @@ describe Calculator do
         press_digits 1, 2, 3
         calculator.minus
 
-        expect(display_contents).to be == "333"
+        expect(display_contents).to be == "333."
 
         press_digits 3, 2, 1
         calculator.equals
 
-        expect(display_contents).to be == "12"
+        expect(display_contents).to be == "12."
       end
     end
 
@@ -317,7 +317,7 @@ describe Calculator do
         press_digit 6
         calculator.equals
 
-        expect(display_contents).to be == "30"
+        expect(display_contents).to be == "30."
       end
     end
 
@@ -328,7 +328,7 @@ describe Calculator do
         press_digit 8
         calculator.equals
 
-        expect(display_contents).to be == "7"
+        expect(display_contents).to be == "7."
       end
     end
 
@@ -337,7 +337,7 @@ describe Calculator do
         press_digits 1, 2, 3
         calculator.plus_minus
         calculator.equals
-        expect(display_contents).to be == "-123"
+        expect(display_contents).to be == "-123."
       end
 
       example do
@@ -346,7 +346,7 @@ describe Calculator do
         press_digits 6, 7
         calculator.plus_minus
         calculator.equals
-        expect(display_contents).to be == "56"
+        expect(display_contents).to be == "56."
       end
 
       example do
@@ -356,7 +356,7 @@ describe Calculator do
         calculator.plus_minus
         press_digit 7
         calculator.equals
-        expect(display_contents).to be == "56"
+        expect(display_contents).to be == "56."
       end
 
       example do
@@ -365,7 +365,7 @@ describe Calculator do
         calculator.plus_minus
         press_digits 7
         calculator.equals
-        expect(display_contents).to be == "130"
+        expect(display_contents).to be == "130."
       end
     end
 
@@ -379,7 +379,7 @@ describe Calculator do
           calculator.ac
           calculator.mr
 
-          expect(display_contents).to be == "123"
+          expect(display_contents).to be == "123."
         end
 
         example do
@@ -389,7 +389,7 @@ describe Calculator do
           calculator.m_plus
           calculator.mr
 
-          expect(display_contents).to be == "579"
+          expect(display_contents).to be == "579."
         end
 
         example do
@@ -404,7 +404,7 @@ describe Calculator do
           calculator.ac
           calculator.mr
 
-          expect(display_contents).to be == "91"
+          expect(display_contents).to be == "91."
         end
       end
 
@@ -417,7 +417,7 @@ describe Calculator do
           calculator.ac
           calculator.mr
 
-          expect(display_contents).to be == "-123"
+          expect(display_contents).to be == "-123."
         end
 
         example do
@@ -427,7 +427,7 @@ describe Calculator do
           calculator.m_minus
           calculator.mr
 
-          expect(display_contents).to be == "-579"
+          expect(display_contents).to be == "-579."
         end
 
         example do
@@ -442,7 +442,7 @@ describe Calculator do
           calculator.ac
           calculator.mr
 
-          expect(display_contents).to be == "-91"
+          expect(display_contents).to be == "-91."
         end
       end
 
@@ -455,7 +455,7 @@ describe Calculator do
           calculator.m_minus
           calculator.mr
 
-          expect(display_contents).to be == "78"
+          expect(display_contents).to be == "78."
         end
       end
 
@@ -468,9 +468,9 @@ describe Calculator do
 
           calculator.mr
           calculator.mc
-          expect(display_contents).to be == "56"
+          expect(display_contents).to be == "56."
           calculator.mr
-          expect(display_contents).to be == "0"
+          expect(display_contents).to be == "0."
         end
       end
     end

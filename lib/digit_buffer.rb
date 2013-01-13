@@ -32,7 +32,7 @@ class DigitBuffer
   end
 
   def to_s
-    to_number.to_s
+    "#{to_number}."
   end
 
   def join
