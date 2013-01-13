@@ -215,7 +215,7 @@ describe Calculator do
           calculator.backspace
           press_digit 9
 
-          expect(display_contents).to be == "123.9"
+          expect(display_contents).to be == "129."
         end
 
         example do

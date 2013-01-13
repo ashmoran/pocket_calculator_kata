@@ -2,7 +2,7 @@ require 'spec_helper'
 
 require 'digit_buffer'
 
-describe DigitBuffer, focus: true do
+describe DigitBuffer do
   subject(:buffer) { DigitBuffer.new(size: 5) }
 
   context "new" do

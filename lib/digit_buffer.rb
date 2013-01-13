@@ -3,16 +3,20 @@ require 'state_machine'
 
 class DigitBuffer
   state_machine initial: :integer do
+    event :clear do
+      transition any => :integer
+    end
+
     event :point do
       transition :integer => :point_pending
     end
 
     event :decimal_entered do
-      transition :point_pending => :decimal
+      transition any => :decimal
     end
 
     event :integer_entered do
-      transition :decimal => :integer
+      transition any => :integer
     end
 
     state :integer do
@@ -24,6 +28,10 @@ class DigitBuffer
         deleted_digit = @digits.pop
         @digits.pop if deleted_digit == "."
         @digits.pop if @digits.last == "."
+      end
+
+      def to_s
+        "#{to_number.to_i}."
       end
     end
 
@@ -38,9 +46,11 @@ class DigitBuffer
       end
 
       def delete_digit
-        deleted_digit = @digits.pop
-        @digits.pop if deleted_digit == "."
-        @digits.pop if @digits.last == "."
+        @digits.pop
+      end
+
+      def to_s
+        "#{to_number.to_i}."
       end
     end
 
@@ -56,23 +66,28 @@ class DigitBuffer
           integer_entered
         end
       end
+
+      def to_s
+        if @digits.last == "."
+          "#{to_number.to_i}."
+        else
+          to_number.to_f.to_s
+        end
+      end
     end
   end
 
   def initialize(options)
+    super()
+
     @size = options.fetch(:size)
     clear
-
-    super()
   end
 
   def clear
     @digits = [ ]
+    super
   end
-
-  # def add_digit(digit)
-  #   @digits << digit unless full?
-  # end
 
   def toggle_sign
     if @digits.first == "-"
@@ -83,25 +98,17 @@ class DigitBuffer
   end
 
   def read_in_number(number)
+    clear
     number = BigDecimal(number)
-    @digits =
-      if number.frac.zero?
-        number.to_i
-      else
-        number.to_f
-      end.to_s.chars.to_a
+    read_in_integer_digits(number.fix.to_i.to_s)
+    if number.frac.nonzero?
+      point
+      read_in_integer_digits(number.frac.to_s("F")[2..-1])
+    end
   end
 
   def to_number
     BigDecimal(@digits.join)
-  end
-
-  def to_s
-    if to_number.frac.zero?
-      "#{to_number.to_i}."
-    else
-      to_number.to_f.to_s
-    end
   end
 
   private
@@ -112,5 +119,11 @@ class DigitBuffer
 
   def point_set?
     @digits.include?(".")
+  end
+
+  def read_in_integer_digits(digit_string)
+    digit_string.chars.each do |digit|
+      add_digit(digit)
+    end
   end
 end
