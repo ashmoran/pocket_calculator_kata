@@ -1,5 +1,6 @@
 class DigitBuffer
-  def initialize
+  def initialize(options)
+    @size = options.fetch(:size)
     clear
   end
 
@@ -8,7 +9,7 @@ class DigitBuffer
   end
 
   def add_digit(digit)
-    @digits << digit if @digits.length < 10
+    @digits << digit if @digits.length < @size
   end
 
   def delete_digit
@@ -33,9 +34,5 @@ class DigitBuffer
 
   def to_s
     "#{to_number}."
-  end
-
-  def join
-    @digits.join
   end
 end

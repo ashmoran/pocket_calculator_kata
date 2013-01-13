@@ -7,7 +7,7 @@ class Calculator
   def initialize(dependencies)
     @display = dependencies.fetch(:display)
 
-    @digits                   = DigitBuffer.new
+    @digits                   = DigitBuffer.new(size: 10)
     @intermediate_calculation = nil
     @next_operation           = :do_nothing
     @memory                   = 0
