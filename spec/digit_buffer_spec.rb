@@ -243,8 +243,6 @@ describe DigitBuffer do
     end
 
     describe "#read_in_number" do
-      example "handling a number longer than the buffer size"
-
       describe "followed by deleting digits" do
         example do
           buffer.read_in_number(BigDecimal("123"))
@@ -314,6 +312,13 @@ describe DigitBuffer do
           expect(buffer.to_number).to be == BigDecimal("12.3")
           expect(buffer.to_s).to be == "12.3"
         end
+      end
+
+      example "handling a number longer than the buffer size" do
+        buffer.read_in_number(BigDecimal("123.123"))
+
+        expect(buffer.to_number).to be == BigDecimal("123.12")
+        expect(buffer.to_s).to be == "123.12"
       end
     end
   end
