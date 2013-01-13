@@ -446,6 +446,19 @@ describe Calculator do
         end
       end
 
+      describe "re-using a number in the display" do
+        example do
+          press_digits 3, 9
+          calculator.m_plus
+          calculator.m_plus
+          calculator.m_plus
+          calculator.m_minus
+          calculator.mr
+
+          expect(display_contents).to be == "78"
+        end
+      end
+
       describe "clearing" do
         example do
           pending
