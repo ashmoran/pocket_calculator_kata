@@ -461,8 +461,6 @@ describe Calculator do
 
       describe "clearing" do
         example do
-          pending
-
           press_digits 8, 1
           calculator.m_plus
           press_digits 2, 5
