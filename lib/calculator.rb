@@ -28,7 +28,7 @@ class Calculator
       transition :building_number => :waiting_for_new_number
     end
 
-    before_transition :building_number => :waiting_for_new_number, do: :store_number
+    # before_transition :building_number => :waiting_for_new_number, do: :store_number
 
     state :off do
       def ac
@@ -77,9 +77,9 @@ class Calculator
         update_display
       end
 
-      def set_next_operation(next_operation)
-        calculate_answer
-        @next_operation = next_operation
+      def set_next_operation(operation)
+        perform_queued_operation
+        @next_operation = operation
         number_completed
         update_display
       end
@@ -148,18 +148,8 @@ class Calculator
 
   private
 
-  def calculate_answer
-    @intermediate_calculation = send(@next_operation)
-    read_intermediate_calculation_into_buffer
-  end
-
-  def store_number
-    @intermediate_calculation = current_display_number
-  end
-
   def clear_everything
     clear_buffer
-    n0
     number_completed
     update_display
   end
@@ -168,46 +158,48 @@ class Calculator
     @digits.clear
   end
 
+  def update_display
+    @display.update(@digits.to_s)
+  end
+
+  def number_completed
+    @intermediate_calculation = buffer_number
+    super
+  end
+
+  def buffer_number
+    @digits.to_number
+  end
+
+  def perform_queued_operation
+    @intermediate_calculation = send(@next_operation)
+    @digits.read_in_number(@intermediate_calculation)
+  end
+
   def delete_digit
     @digits.delete_digit
     update_display
   end
 
-  def update_current_number
-    @intermediate_calculation = current_display_number
-  end
-
-  def update_display
-    @display.update(@digits.to_s)
-  end
-
-  def read_intermediate_calculation_into_buffer
-    @digits.read_in_number(@intermediate_calculation)
-  end
-
-  def current_display_number
-    @digits.to_number
-  end
-
   # Operation implementations
 
   def do_plus
-    @intermediate_calculation + current_display_number
+    @intermediate_calculation + buffer_number
   end
 
   def do_minus
-    @intermediate_calculation - current_display_number
+    @intermediate_calculation - buffer_number
   end
 
   def do_times
-    @intermediate_calculation * current_display_number
+    @intermediate_calculation * buffer_number
   end
 
   def do_divide_by
-    @intermediate_calculation / current_display_number
+    @intermediate_calculation / buffer_number
   end
 
   def do_nothing
-    current_display_number
+    buffer_number
   end
 end

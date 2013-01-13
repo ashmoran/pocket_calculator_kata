@@ -1,4 +1,8 @@
 class DigitBuffer
+  def initialize
+    clear
+  end
+
   def clear
     @digits = [ ]
   end
