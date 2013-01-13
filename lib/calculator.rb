@@ -168,6 +168,10 @@ class Calculator
     @memory += @digits.to_number
   end
 
+  def m_minus
+    @memory -= @digits.to_number
+  end
+
   def mr
     @digits.read_in_number(@memory)
     update_display

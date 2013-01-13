@@ -397,6 +397,34 @@ describe Calculator do
           expect(display_contents).to be == "91"
         end
       end
+
+      describe "subtraction" do
+        example do
+          press_digits 1, 2, 3
+          calculator.m_minus
+          calculator.plus
+          press_digits 4, 5, 6
+          calculator.ac
+          calculator.mr
+
+          expect(display_contents).to be == "-123"
+        end
+
+        example do
+          press_digits 1, 2
+          calculator.m_minus
+          calculator.ac
+          press_digits 3, 4
+          calculator.m_minus
+          calculator.ac
+          press_digits 4, 5
+          calculator.m_minus
+          calculator.ac
+          calculator.mr
+
+          expect(display_contents).to be == "-91"
+        end
+      end
     end
   end
 end
