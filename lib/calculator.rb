@@ -166,15 +166,21 @@ class Calculator
 
   def m_plus
     @memory += @digits.to_number
+    number_completed
   end
 
   def m_minus
     @memory -= @digits.to_number
+    number_completed
   end
 
   def mr
     @digits.read_in_number(@memory)
     update_display
+  end
+
+  def mc
+    @memory = 0
   end
 
   private

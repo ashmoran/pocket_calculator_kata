@@ -383,6 +383,16 @@ describe Calculator do
         end
 
         example do
+          press_digits 1, 2, 3
+          calculator.m_plus
+          press_digits 4, 5, 6
+          calculator.m_plus
+          calculator.mr
+
+          expect(display_contents).to be == "579"
+        end
+
+        example do
           press_digits 1, 2
           calculator.m_plus
           calculator.ac
@@ -411,6 +421,16 @@ describe Calculator do
         end
 
         example do
+          press_digits 1, 2, 3
+          calculator.m_minus
+          press_digits 4, 5, 6
+          calculator.m_minus
+          calculator.mr
+
+          expect(display_contents).to be == "-579"
+        end
+
+        example do
           press_digits 1, 2
           calculator.m_minus
           calculator.ac
@@ -423,6 +443,23 @@ describe Calculator do
           calculator.mr
 
           expect(display_contents).to be == "-91"
+        end
+      end
+
+      describe "clearing" do
+        example do
+          pending
+
+          press_digits 8, 1
+          calculator.m_plus
+          press_digits 2, 5
+          calculator.m_minus
+
+          calculator.mr
+          calculator.mc
+          expect(display_contents).to be == "56"
+          calculator.mr
+          expect(display_contents).to be == "0"
         end
       end
     end
