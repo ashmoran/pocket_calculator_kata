@@ -147,6 +147,22 @@ describe Calculator do
           press_digits 4, 5
           expect(display_contents).to be == "123.45"
         end
+
+        example do
+          press_digits 1, 2, 3
+          calculator.point
+          press_digits 0, 1, 0
+          calculator.equals
+          expect(display_contents).to be == "123.01"
+        end
+
+        example do
+          press_digits 1, 2, 3
+          calculator.point
+          press_digits 0, 0, 0
+          calculator.equals
+          expect(display_contents).to be == "123."
+        end
       end
 
       describe "changing your mind about an operation" do
@@ -417,6 +433,72 @@ describe Calculator do
         press_digits 7
         calculator.equals
         expect(display_contents).to be == "130."
+      end
+    end
+
+    describe "decimal maths" do
+      example "addition" do
+        press_digits 1, 2
+        calculator.point
+        press_digits 3, 4
+
+        calculator.plus
+
+        press_digits 5, 6
+        calculator.point
+        press_digits 7, 8
+
+        calculator.equals
+
+        expect(display_contents).to be == "69.12"
+      end
+
+      example "subtraction" do
+        press_digits 5, 6
+        calculator.point
+        press_digits 7, 8
+
+        calculator.minus
+
+        press_digits 1, 2
+        calculator.point
+        press_digits 3, 4
+
+        calculator.equals
+
+        expect(display_contents).to be == "44.44"
+      end
+
+      example "multiplication" do
+        press_digits 1, 2
+        calculator.point
+        press_digits 3, 4
+
+        calculator.times
+
+        press_digits 5, 6
+        calculator.point
+        press_digits 7, 8
+
+        calculator.equals
+
+        expect(display_contents).to be == "700.6652"
+      end
+
+      example "division" do
+        press_digits 5, 6
+        calculator.point
+        press_digits 7, 8
+
+        calculator.divide_by
+
+        press_digits 1, 2
+        calculator.point
+        press_digits 3, 4
+
+        calculator.equals
+
+        expect(display_contents).to be == "4.601296596"
       end
     end
 

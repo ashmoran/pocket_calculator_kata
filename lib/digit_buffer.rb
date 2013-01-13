@@ -25,9 +25,7 @@ class DigitBuffer
       end
 
       def delete_digit
-        deleted_digit = @digits.pop
-        @digits.pop if deleted_digit == "."
-        @digits.pop if @digits.last == "."
+        @digits.pop
       end
 
       def to_s
@@ -68,11 +66,7 @@ class DigitBuffer
       end
 
       def to_s
-        if @digits.last == "."
-          "#{to_number.to_i}."
-        else
-          to_number.to_f.to_s
-        end
+        @digits.join
       end
     end
   end

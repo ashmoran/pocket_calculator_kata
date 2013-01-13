@@ -153,6 +153,18 @@ describe DigitBuffer do
       expect(buffer.to_s).to be == "12.34"
     end
 
+    example do
+      buffer.add_digit("1")
+      buffer.add_digit("2")
+      buffer.point
+      buffer.add_digit("0")
+      buffer.add_digit("1")
+      buffer.add_digit("0")
+
+      expect(buffer.to_number).to be == BigDecimal("12.01")
+      expect(buffer.to_s).to be == "12.010"
+    end
+
     describe "deleting digits" do
       example do
         buffer.add_digit("1")
