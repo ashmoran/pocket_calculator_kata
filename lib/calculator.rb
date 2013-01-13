@@ -5,9 +5,9 @@ require_relative 'digit_buffer'
 
 class Calculator
   def initialize(dependencies)
-    @display = dependencies.fetch(:display)
+    @display  = dependencies.fetch(:display)
+    @digits   = dependencies.fetch(:digit_buffer, DigitBuffer.new(size: 10))
 
-    @digits                   = DigitBuffer.new(size: 10)
     @intermediate_calculation = nil
     @next_operation           = :do_nothing
     @memory                   = 0
@@ -55,7 +55,7 @@ class Calculator
         start_building_number
       end
 
-      def set_next_operation(next_operation)
+      def operation_chosen(next_operation)
         @next_operation = next_operation
       end
 
@@ -75,7 +75,7 @@ class Calculator
         update_display
       end
 
-      def set_next_operation(operation)
+      def operation_chosen(operation)
         perform_queued_operation
         @next_operation = operation
         number_completed
@@ -99,29 +99,33 @@ class Calculator
     end
   end
 
+  def point
+    @digits.point
+  end
+
   def plus_minus
     @digits.toggle_sign
     update_display
   end
 
   def plus
-    set_next_operation(:do_plus)
+    operation_chosen(:do_plus)
   end
 
   def minus
-    set_next_operation(:do_minus)
+    operation_chosen(:do_minus)
   end
 
   def times
-    set_next_operation(:do_times)
+    operation_chosen(:do_times)
   end
 
   def divide_by
-    set_next_operation(:do_divide_by)
+    operation_chosen(:do_divide_by)
   end
 
   def equals
-    set_next_operation(:do_nothing)
+    operation_chosen(:do_nothing)
     update_display
   end
 

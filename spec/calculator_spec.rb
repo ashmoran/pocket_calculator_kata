@@ -2,11 +2,7 @@ require 'spec_helper'
 
 require 'calculator'
 
-describe Calculator do
-  include PocketCalculatorHelper
-
-  subject(:calculator) { Calculator.new(display: self) }
-
+module MockDisplay
   def update(contents)
     @displayed_values << contents
   end
@@ -15,8 +11,19 @@ describe Calculator do
     @displayed_values.last
   end
 
-  before(:each) do
+  def reset_display_memory
     @displayed_values = [ ]
+  end
+end
+
+describe Calculator do
+  include PocketCalculatorHelper
+  include MockDisplay
+
+  subject(:calculator) { Calculator.new(display: self) }
+
+  before(:each) do
+    reset_display_memory
   end
 
   context "just taken out of the box" do
@@ -127,6 +134,21 @@ describe Calculator do
         end
       end
 
+      describe "decimals" do
+        example do
+          press_digits 1, 2, 3
+          calculator.point
+          expect(display_contents).to be == "123."
+        end
+
+        example do
+          press_digits 1, 2, 3
+          calculator.point
+          press_digits 4, 5
+          expect(display_contents).to be == "123.45"
+        end
+      end
+
       describe "changing your mind about an operation" do
         example do
           press_digits 4, 5, 6
@@ -165,6 +187,35 @@ describe Calculator do
           end
 
           expect(display_contents).to be == "0."
+        end
+
+        example do
+          press_digits 1, 2, 3
+          calculator.point
+          press_digits 4, 5
+          calculator.backspace
+
+          expect(display_contents).to be == "123.4"
+        end
+
+        example do
+          press_digits 1, 2, 3
+          calculator.point
+          press_digits 4, 5
+          calculator.backspace
+
+          expect(display_contents).to be == "123.4"
+        end
+
+        example do
+          press_digits 1, 2, 3
+          calculator.point
+          press_digit 4
+          calculator.backspace
+          calculator.backspace
+          press_digit 9
+
+          expect(display_contents).to be == "123.9"
         end
 
         example do

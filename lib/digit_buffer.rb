@@ -1,7 +1,16 @@
+require 'bigdecimal'
+require 'state_machine'
+
 class DigitBuffer
+  state_machine initial: :integer do
+
+  end
+
   def initialize(options)
     @size = options.fetch(:size)
     clear
+
+    super()
   end
 
   def clear
@@ -9,11 +18,17 @@ class DigitBuffer
   end
 
   def add_digit(digit)
-    @digits << digit if @digits.length < @size
+    @digits << digit unless full?
+  end
+
+  def point
+    add_digit(".") unless point_set?
   end
 
   def delete_digit
-    @digits.pop
+    deleted_digit = @digits.pop
+    @digits.pop if deleted_digit == "."
+    @digits.pop if @digits.last == "."
   end
 
   def toggle_sign
@@ -25,14 +40,34 @@ class DigitBuffer
   end
 
   def read_in_number(number)
-    @digits = number.to_s.chars.to_a
+    number = BigDecimal(number)
+    @digits =
+      if number.frac.zero?
+        number.to_i
+      else
+        number.to_f
+      end.to_s.chars.to_a
   end
 
   def to_number
-    @digits.join.to_i
+    BigDecimal(@digits.join)
   end
 
   def to_s
-    "#{to_number}."
+    if to_number.frac.zero?
+      "#{to_number.to_i}."
+    else
+      to_number.to_f.to_s
+    end
+  end
+
+  private
+
+  def full?
+    @digits.select { |digit| digit =~ /^[0-9]$/ }.length >= @size
+  end
+
+  def point_set?
+    @digits.include?(".")
   end
 end
