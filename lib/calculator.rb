@@ -2,12 +2,52 @@ require 'state_machine'
 require 'facets/enumerable'
 
 class Calculator
+  class DigitBuffer
+    def clear
+      @digits = [ ]
+    end
+
+    def add_digit(digit)
+      @digits << digit if @digits.length < 10
+    end
+
+    def delete_digit
+      @digits.pop
+      # add_digit("0") if @digits.empty?
+    end
+
+    def toggle_sign
+      if @digits.first == "-"
+        @digits.shift
+      else
+        @digits.unshift("-")
+      end
+    end
+
+    def read_in_number(number)
+      @digits = number.to_s.chars.to_a
+    end
+
+    def to_number
+      @digits.join.to_i
+    end
+
+    def to_s
+      to_number.to_s
+    end
+
+    def join
+      @digits.join
+    end
+  end
+
   def initialize(dependencies)
     @display = dependencies.fetch(:display)
 
-    @digits                   = [ ]
+    @digits                   = DigitBuffer.new
     @intermediate_calculation = nil
     @next_operation           = :do_nothing
+    @memory                   = 0
 
     super()
   end
@@ -48,8 +88,8 @@ class Calculator
       end
 
       def digit_pressed(digit)
-        clear_display
-        add_digit(digit)
+        clear_buffer
+        @digits.add_digit(digit)
         update_display
         start_building_number
       end
@@ -70,7 +110,7 @@ class Calculator
       end
 
       def digit_pressed(digit)
-        add_digit(digit) if @digits.length < 10
+        @digits.add_digit(digit)
         update_display
       end
 
@@ -88,8 +128,7 @@ class Calculator
   end
 
   def c
-    clear_display
-    add_digit("0")
+    @digits.clear
     update_display
   end
 
@@ -100,12 +139,7 @@ class Calculator
   end
 
   def plus_minus
-    if @digits.first == "-"
-      @digits.shift
-    else
-      @digits.unshift("-")
-    end
-
+    @digits.toggle_sign
     update_display
   end
 
@@ -127,14 +161,15 @@ class Calculator
 
   def equals
     handle_operation(:do_nothing)
+    update_display
   end
 
   def m_plus
-    @memory = @digits.dup
+    @memory += @digits.to_number
   end
 
   def mr
-    @digits = @memory
+    @digits.read_in_number(@memory)
     update_display
   end
 
@@ -142,73 +177,64 @@ class Calculator
 
   def calculate_answer
     @intermediate_calculation = send(@next_operation)
-    display_intermediate_calculation
+    read_intermediate_calculation_into_buffer
   end
 
   def store_number
-    @intermediate_calculation = current_number
-  end
-
-  def restore_current_number_to_buffer
-    @digits
+    @intermediate_calculation = current_display_number
   end
 
   def clear_everything
-    clear_display
+    clear_buffer
     n0
     number_completed
     update_display
   end
 
-  def clear_display
-    @digits = [ ]
-  end
-
-  def add_digit(digit)
-    @digits << digit
+  def clear_buffer
+    @digits.clear
   end
 
   def delete_digit
-    @digits.pop
-    add_digit("0") if @digits.empty?
+    @digits.delete_digit
     update_display
   end
 
   def update_current_number
-    @intermediate_calculation = current_number
+    @intermediate_calculation = current_display_number
   end
 
   def update_display
-    @display.update(@digits.join)
+    @display.update(@digits.to_s)
   end
 
-  def display_intermediate_calculation
-    @digits = @intermediate_calculation.to_s.chars.to_a
+  def read_intermediate_calculation_into_buffer
+    @digits.read_in_number(@intermediate_calculation)
   end
 
-  def current_number
-    @digits.join.to_i
+  def current_display_number
+    @digits.to_number
   end
 
   # Operation implementations
 
   def do_plus
-    @intermediate_calculation + current_number
+    @intermediate_calculation + current_display_number
   end
 
   def do_minus
-    @intermediate_calculation - current_number
+    @intermediate_calculation - current_display_number
   end
 
   def do_times
-    @intermediate_calculation * current_number
+    @intermediate_calculation * current_display_number
   end
 
   def do_divide_by
-    @intermediate_calculation / current_number
+    @intermediate_calculation / current_display_number
   end
 
   def do_nothing
-    current_number
+    current_display_number
   end
 end
