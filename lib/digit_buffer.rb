@@ -3,7 +3,60 @@ require 'state_machine'
 
 class DigitBuffer
   state_machine initial: :integer do
+    event :point do
+      transition :integer => :point_pending
+    end
 
+    event :decimal_entered do
+      transition :point_pending => :decimal
+    end
+
+    event :integer_entered do
+      transition :decimal => :integer
+    end
+
+    state :integer do
+      def add_digit(digit)
+        @digits << digit unless full?
+      end
+
+      def delete_digit
+        deleted_digit = @digits.pop
+        @digits.pop if deleted_digit == "."
+        @digits.pop if @digits.last == "."
+      end
+    end
+
+    state :point_pending do
+      def add_digit(digit)
+        unless full?
+          @digits << "."
+          @digits << digit
+        end
+
+        decimal_entered
+      end
+
+      def delete_digit
+        deleted_digit = @digits.pop
+        @digits.pop if deleted_digit == "."
+        @digits.pop if @digits.last == "."
+      end
+    end
+
+    state :decimal do
+      def add_digit(digit)
+        @digits << digit unless full?
+      end
+
+      def delete_digit
+        deleted_digit = @digits.pop
+        if deleted_digit == "."
+          @digits.pop
+          integer_entered
+        end
+      end
+    end
   end
 
   def initialize(options)
@@ -17,19 +70,9 @@ class DigitBuffer
     @digits = [ ]
   end
 
-  def add_digit(digit)
-    @digits << digit unless full?
-  end
-
-  def point
-    add_digit(".") unless point_set?
-  end
-
-  def delete_digit
-    deleted_digit = @digits.pop
-    @digits.pop if deleted_digit == "."
-    @digits.pop if @digits.last == "."
-  end
+  # def add_digit(digit)
+  #   @digits << digit unless full?
+  # end
 
   def toggle_sign
     if @digits.first == "-"

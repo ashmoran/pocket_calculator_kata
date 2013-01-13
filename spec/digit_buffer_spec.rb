@@ -191,8 +191,6 @@ describe DigitBuffer, focus: true do
       end
 
       example do
-        pending
-
         buffer.add_digit("1")
         buffer.add_digit("2")
         buffer.point
