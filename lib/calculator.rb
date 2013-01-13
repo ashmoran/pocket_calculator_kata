@@ -28,8 +28,6 @@ class Calculator
       transition :building_number => :waiting_for_new_number
     end
 
-    # before_transition :building_number => :waiting_for_new_number, do: :store_number
-
     state :off do
       def ac
         turn_on
