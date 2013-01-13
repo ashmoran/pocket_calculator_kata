@@ -57,7 +57,7 @@ class Calculator
         start_building_number
       end
 
-      def handle_operation(next_operation)
+      def set_next_operation(next_operation)
         @next_operation = next_operation
       end
 
@@ -77,7 +77,7 @@ class Calculator
         update_display
       end
 
-      def handle_operation(next_operation)
+      def set_next_operation(next_operation)
         calculate_answer
         @next_operation = next_operation
         number_completed
@@ -107,23 +107,23 @@ class Calculator
   end
 
   def plus
-    handle_operation(:do_plus)
+    set_next_operation(:do_plus)
   end
 
   def minus
-    handle_operation(:do_minus)
+    set_next_operation(:do_minus)
   end
 
   def times
-    handle_operation(:do_times)
+    set_next_operation(:do_times)
   end
 
   def divide_by
-    handle_operation(:do_divide_by)
+    set_next_operation(:do_divide_by)
   end
 
   def equals
-    handle_operation(:do_nothing)
+    set_next_operation(:do_nothing)
     update_display
   end
 
