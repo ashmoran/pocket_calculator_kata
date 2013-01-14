@@ -30,7 +30,7 @@ describe Calculator do
     describe "AC" do
       it "turns the calculator on (we don't actually care what happens when it's off)" do
         expect {
-          calculator.ac
+          press :ac
         }.to change { display_contents }.from(nil).to("0.")
       end
     end
@@ -38,28 +38,28 @@ describe Calculator do
 
   context "turned on" do
     before(:each) do
-      calculator.ac
+      press :ac
     end
 
     describe "typing" do
       example do
-        press_digit 1
+        press 1
         expect(display_contents).to be == "1."
       end
 
       example do
-        press_digits 1, 2
+        press 1, 2
         expect(display_contents).to be == "12."
       end
 
       example do
-        press_digits 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
+        press 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
 
         expect(display_contents).to be == "1234567890."
       end
 
       example do
-        press_digits 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1
+        press 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1
 
         expect(display_contents.length).to be == 11
         expect(display_contents).to be == "1234567890."
@@ -67,427 +67,251 @@ describe Calculator do
 
       describe "equals" do
         example do
-          press_digits 1, 2, 3
-          calculator.equals
-          press_digits 4, 5, 6
+          press 1, 2, 3, :eq, 4, 5, 6
           expect(display_contents).to be == "456."
         end
       end
 
       describe "addition" do
         example do
-          press_digits 1, 2, 3
-          calculator.plus
+          press 1, 2, 3, :+
           expect(display_contents).to be == "123."
 
-          press_digit 4
+          press 4
           expect(display_contents).to be == "4."
-          press_digits 5, 6
+          press 5, 6
           expect(display_contents).to be == "456."
         end
       end
 
       describe "subtraction" do
         example do
-          press_digits 4, 5, 6
-          calculator.minus
+          press 4, 5, 6, :-
           expect(display_contents).to be == "456."
 
-          press_digit 1
+          press 1
           expect(display_contents).to be == "1."
-          press_digits 2, 3
+          press 2, 3
           expect(display_contents).to be == "123."
         end
       end
 
       describe "negative numbers" do
         example do
-          press_digits 1, 2, 3
-          calculator.plus_minus
+          press 1, 2, 3, :plus_minus
           expect(display_contents).to be == "-123."
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.plus_minus
-          calculator.plus_minus
+          press 1, 2, 3, :plus_minus, :plus_minus
           expect(display_contents).to be == "123."
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.plus
-          calculator.plus_minus
+          press 1, 2, 3, :+, :plus_minus
           expect(display_contents).to be == "-123."
-          press_digit 7
+          press 7
           expect(display_contents).to be == "7."
         end
       end
 
       describe "decimals" do
         example do
-          press_digits 1, 2, 3
-          calculator.point
+          press 1, 2, 3, :point
           expect(display_contents).to be == "123."
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.point
-          press_digits 4, 5
+          press 1, 2, 3, :point, 4, 5
           expect(display_contents).to be == "123.45"
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.point
-          press_digits 0, 1, 0
-          calculator.equals
+          press 1, 2, 3, :point, 0, 1, 0, :eq
           expect(display_contents).to be == "123.01"
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.point
-          press_digits 0, 0, 0
-          calculator.equals
+          press 1, 2, 3, :point, 0, 0, 0, :eq
           expect(display_contents).to be == "123."
         end
       end
 
       describe "changing your mind about an operation" do
         example do
-          press_digits 4, 5, 6
-          calculator.plus
-          calculator.minus
-
-          press_digits 1, 2, 3
-          calculator.equals
-
+          press 4, 5, 6, :+, :-, 1, 2, 3, :eq
           expect(display_contents).to be == "333."
         end
       end
 
       describe "backspace" do
         example do
-          press_digits 1, 2, 3
-          calculator.backspace
+          press 1, 2, 3, :backspace
           expect(display_contents).to be == "12."
         end
 
         example do
-          press_digits 1, 2, 3
-
-          3.times do
-            calculator.backspace
-          end
-
+          press 1, 2, 3, :backspace, :backspace, :backspace
           expect(display_contents).to be == "0."
         end
 
         example do
-          press_digits 1, 2, 3
-
-          4.times do
-            calculator.backspace
-          end
-
+          press 1, 2, 3, :backspace, :backspace, :backspace, :backspace
           expect(display_contents).to be == "0."
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.point
-          press_digits 4, 5
-          calculator.backspace
-
+          press 1, 2, 3, :point, 4, 5, :backspace
           expect(display_contents).to be == "123.4"
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.point
-          press_digits 4, 5
-          calculator.backspace
-
+          press 1, 2, 3, :point, 4, 5, :backspace
           expect(display_contents).to be == "123.4"
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.point
-          press_digit 4
-          calculator.backspace
-          calculator.backspace
-          press_digit 9
-
+          press 1, 2, 3, :point, 4, :backspace, :backspace, 9
           expect(display_contents).to be == "129."
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.plus
-          press_digits 4, 5, 6
-          calculator.backspace
-          calculator.equals
-
+          press 1, 2, 3, :+, 4, 5, 6, :backspace, :eq
           expect(display_contents).to be == "168."
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.plus
-          calculator.backspace
-          calculator.equals
-
+          press 1, 2, 3, :+, :backspace, :eq
           expect(display_contents).to be == "135."
         end
       end
 
       describe "clear" do
         example do
-          press_digits 1, 2, 3
-          calculator.plus
-          press_digits 4, 5, 6
-          calculator.c
-
+          press 1, 2, 3, :+, 4, 5, 6, :c
           expect(display_contents).to be == "0."
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.plus
-          press_digits 4, 5, 6
-          calculator.c
-          press_digits 1, 2, 3
-          calculator.equals
-
+          press 1, 2, 3, :+, 4, 5, 6, :c,
+                1, 2, 3, :eq
           expect(display_contents).to be == "246."
         end
       end
 
       describe "all clear" do
         example do
-          press_digits 1, 2, 3
-          calculator.plus
-          press_digits 4, 5, 6
-          calculator.ac
-
+          press 1, 2, 3, :+, 4, 5, 6, :ac
           expect(display_contents).to be == "0."
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.plus
-          press_digits 4, 5, 6
-          calculator.ac
-          press_digits 1, 2, 3
-          calculator.equals
-
+          press 1, 2, 3, :+, 4, 5, 6, :ac,
+                1, 2, 3, :eq
           expect(display_contents).to be == "123."
         end
       end
     end
 
     describe "addition" do
-      before(:each) do
-        calculator.ac
-      end
-
       example do
-        press_digits 1, 2, 3
-        calculator.plus
-        press_digits 4, 5, 6
-        calculator.equals
-
+        press 1, 2, 3, :+, 4, 5, 6, :eq
         expect(display_contents).to be == "579."
       end
 
       example do
-        press_digits 1, 2, 3
-        calculator.plus
-        press_digits 4, 5, 6
-        calculator.plus
-
+        press 1, 2, 3, :+, 4, 5, 6, :+
         expect(display_contents).to be == "579."
 
-        press_digits 7, 8, 9
-        calculator.equals
-
+        press 7, 8, 9, :eq
         expect(display_contents).to be == "1368."
       end
 
       example do
-        press_digits 1, 2, 3
-        calculator.plus
-        press_digits 4, 5, 6
-        calculator.equals
-        calculator.plus
-        press_digits 7, 8, 9
-        calculator.equals
-
+        press 1, 2, 3, :+, 4, 5, 6, :eq,
+              :+, 7, 8, 9, :eq
         expect(display_contents).to be == "1368."
       end
 
       example do
-        calculator.plus
-        press_digits 1, 2, 3
-        calculator.equals
-
+        press :+, 1, 2, 3, :eq
         expect(display_contents).to be == "123."
       end
     end
 
     describe "subtraction" do
-      before(:each) do
-        calculator.ac
-      end
-
       example do
-        press_digits 4, 5, 6
-        calculator.minus
-        press_digits 1, 2, 3
-        calculator.equals
-
+        press 4, 5, 6, :-, 1, 2, 3, :eq
         expect(display_contents).to be == "333."
       end
 
       example do
-        press_digits 4, 5, 6
-        calculator.minus
-        press_digits 1, 2, 3
-        calculator.minus
-
+        press 4, 5, 6, :-, 1, 2, 3, :-
         expect(display_contents).to be == "333."
 
-        press_digits 3, 2, 1
-        calculator.equals
-
+        press 3, 2, 1, :eq
         expect(display_contents).to be == "12."
       end
     end
 
     describe "multiplication" do
       example do
-        press_digit 5
-        calculator.times
-        press_digit 6
-        calculator.equals
-
+        press 5, :*, 6, :eq
         expect(display_contents).to be == "30."
       end
     end
 
     describe "division" do
       example do
-        press_digits 5, 6
-        calculator.divide_by
-        press_digit 8
-        calculator.equals
-
+        press 5, 6, :/, 8, :eq
         expect(display_contents).to be == "7."
       end
     end
 
     describe "negative numbers" do
       example do
-        press_digits 1, 2, 3
-        calculator.plus_minus
-        calculator.equals
+        press 1, 2, 3, :plus_minus, :eq
         expect(display_contents).to be == "-123."
       end
 
       example do
-        press_digits 1, 2, 3
-        calculator.plus
-        press_digits 6, 7
-        calculator.plus_minus
-        calculator.equals
+        press 1, 2, 3, :+, 6, 7, :plus_minus, :eq
         expect(display_contents).to be == "56."
       end
 
       example do
-        press_digits 1, 2, 3
-        calculator.plus
-        press_digit 6
-        calculator.plus_minus
-        press_digit 7
-        calculator.equals
+        press 1, 2, 3, :+, 6, :plus_minus, 7, :eq
         expect(display_contents).to be == "56."
       end
 
       example do
-        press_digits 1, 2, 3
-        calculator.plus
-        calculator.plus_minus
-        press_digits 7
-        calculator.equals
+        press 1, 2, 3, :+, :plus_minus, 7, :eq
         expect(display_contents).to be == "130."
       end
     end
 
     describe "decimal maths" do
       example "addition" do
-        press_digits 1, 2
-        calculator.point
-        press_digits 3, 4
-
-        calculator.plus
-
-        press_digits 5, 6
-        calculator.point
-        press_digits 7, 8
-
-        calculator.equals
-
+        press 1, 2, :point, 3, 4, :+,
+              5, 6, :point, 7, 8, :eq
         expect(display_contents).to be == "69.12"
       end
 
       example "subtraction" do
-        press_digits 5, 6
-        calculator.point
-        press_digits 7, 8
-
-        calculator.minus
-
-        press_digits 1, 2
-        calculator.point
-        press_digits 3, 4
-
-        calculator.equals
-
+        press 5, 6, :point, 7, 8, :-,
+              1, 2, :point, 3, 4, :eq
         expect(display_contents).to be == "44.44"
       end
 
       example "multiplication" do
-        press_digits 1, 2
-        calculator.point
-        press_digits 3, 4
-
-        calculator.times
-
-        press_digits 5, 6
-        calculator.point
-        press_digits 7, 8
-
-        calculator.equals
-
+        press 1, 2, :point, 3, 4, :*,
+              5, 6, :point, 7, 8, :eq
         expect(display_contents).to be == "700.6652"
       end
 
       example "division" do
-        press_digits 5, 6
-        calculator.point
-        press_digits 7, 8
-
-        calculator.divide_by
-
-        press_digits 1, 2
-        calculator.point
-        press_digits 3, 4
-
-        calculator.equals
-
+        press 5, 6, :point, 7, 8, :/,
+              1, 2, :point, 3, 4, :eq
         expect(display_contents).to be == "4.601296596"
       end
     end
@@ -495,107 +319,69 @@ describe Calculator do
     describe "memory" do
       describe "adding" do
         example do
-          press_digits 1, 2, 3
-          calculator.m_plus
-          calculator.plus
-          press_digits 4, 5, 6
-          calculator.ac
-          calculator.mr
-
+          press 1, 2, 3, :m_plus, :+,
+                4, 5, 6, :ac,
+                :mr
           expect(display_contents).to be == "123."
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.m_plus
-          press_digits 4, 5, 6
-          calculator.m_plus
-          calculator.mr
-
+          press 1, 2, 3, :m_plus,
+                4, 5, 6, :m_plus,
+                :mr
           expect(display_contents).to be == "579."
         end
 
         example do
-          press_digits 1, 2
-          calculator.m_plus
-          calculator.ac
-          press_digits 3, 4
-          calculator.m_plus
-          calculator.ac
-          press_digits 4, 5
-          calculator.m_plus
-          calculator.ac
-          calculator.mr
-
+          press 1, 2, :m_plus, :ac,
+                3, 4, :m_plus, :ac,
+                4, 5, :m_plus, :ac,
+                :mr
           expect(display_contents).to be == "91."
         end
       end
 
       describe "subtracting" do
         example do
-          press_digits 1, 2, 3
-          calculator.m_minus
-          calculator.plus
-          press_digits 4, 5, 6
-          calculator.ac
-          calculator.mr
-
+          press 1, 2, 3, :m_minus, :+,
+                4, 5, 6, :ac,
+                :mr
           expect(display_contents).to be == "-123."
         end
 
         example do
-          press_digits 1, 2, 3
-          calculator.m_minus
-          press_digits 4, 5, 6
-          calculator.m_minus
-          calculator.mr
-
+          press 1, 2, 3, :m_minus,
+                4, 5, 6, :m_minus,
+                :mr
           expect(display_contents).to be == "-579."
         end
 
         example do
-          press_digits 1, 2
-          calculator.m_minus
-          calculator.ac
-          press_digits 3, 4
-          calculator.m_minus
-          calculator.ac
-          press_digits 4, 5
-          calculator.m_minus
-          calculator.ac
-          calculator.mr
-
+          press 1, 2, :m_minus, :ac,
+                3, 4, :m_minus, :ac,
+                4, 5, :m_minus, :ac,
+                :mr
           expect(display_contents).to be == "-91."
         end
 
         describe "storing mid-calculation" do
           example do
-            press_digits 1, 2, 3
-            calculator.m_plus
-            calculator.ac
-
-            press_digits 4, 5, 6
-            calculator.plus
-            press_digits 7, 8, 9
-            calculator.m_plus
+            press 1, 2, 3, :m_plus, :ac,
+                  4, 5, 6, :+,
+                  7, 8, 9, :m_plus
             expect(display_contents).to be == "1245."
 
-            calculator.mr
+            press :mr
             expect(display_contents).to be == "1368."
           end
 
           example do
-            press_digits 7, 8, 9
-            calculator.m_plus
-            calculator.ac
-
-            press_digits 4, 5, 6
-            calculator.plus
-            press_digits 1, 2, 3
-            calculator.m_minus
+            press 7, 8, 9, :m_plus, :ac,
+                  4, 5, 6, :+,
+                  1, 2, 3, :m_minus
             expect(display_contents).to be == "579."
 
-            calculator.mr
+            press :mr
             expect(display_contents).to be == "210."
           end
         end
@@ -603,28 +389,23 @@ describe Calculator do
 
       describe "re-using a number in the display" do
         example do
-          press_digits 3, 9
-          calculator.m_plus
-          calculator.m_plus
-          calculator.m_plus
-          calculator.m_minus
-          calculator.mr
-
+          press 3, 9,
+                :m_plus, :m_plus, :m_plus,
+                :m_minus,
+                :mr
           expect(display_contents).to be == "78."
         end
       end
 
       describe "clearing" do
         example do
-          press_digits 8, 1
-          calculator.m_plus
-          press_digits 2, 5
-          calculator.m_minus
-
-          calculator.mr
-          calculator.mc
+          press 8, 1, :m_plus,
+                2, 5, :m_minus,
+                :mr,
+                :mc
           expect(display_contents).to be == "56."
-          calculator.mr
+
+          press :mr
           expect(display_contents).to be == "0."
         end
       end
