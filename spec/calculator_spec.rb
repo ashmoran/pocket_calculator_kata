@@ -27,18 +27,8 @@ describe Calculator do
   end
 
   context "just taken out of the box" do
-    it "is turned off" do
-      expect {
-        press_digits 1, 2, 3
-      }.to_not change { display_contents }.from(nil)
-    end
-
-    it "lets you press any button without anything happening" do
-      pending "We're currently cheating by only disabling digits"
-    end
-
     describe "AC" do
-      it "turns the calculator on" do
+      it "turns the calculator on (we don't actually care what happens when it's off)" do
         expect {
           calculator.ac
         }.to change { display_contents }.from(nil).to("0.")
@@ -541,7 +531,7 @@ describe Calculator do
         end
       end
 
-      describe "subtraction" do
+      describe "subtracting" do
         example do
           press_digits 1, 2, 3
           calculator.m_minus
@@ -576,6 +566,38 @@ describe Calculator do
           calculator.mr
 
           expect(display_contents).to be == "-91."
+        end
+
+        describe "storing mid-calculation" do
+          example do
+            press_digits 1, 2, 3
+            calculator.m_plus
+            calculator.ac
+
+            press_digits 4, 5, 6
+            calculator.plus
+            press_digits 7, 8, 9
+            calculator.m_plus
+            expect(display_contents).to be == "1245."
+
+            calculator.mr
+            expect(display_contents).to be == "1368."
+          end
+
+          example do
+            press_digits 7, 8, 9
+            calculator.m_plus
+            calculator.ac
+
+            press_digits 4, 5, 6
+            calculator.plus
+            press_digits 1, 2, 3
+            calculator.m_minus
+            expect(display_contents).to be == "579."
+
+            calculator.mr
+            expect(display_contents).to be == "210."
+          end
         end
       end
 

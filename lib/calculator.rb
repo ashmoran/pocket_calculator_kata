@@ -15,11 +15,7 @@ class Calculator
     super()
   end
 
-  state_machine initial: :off do
-    event :turn_on do
-      transition :off => :building_number
-    end
-
+  state_machine initial: :building_number do
     event :start_building_number do
       transition :waiting_for_new_number => :building_number
     end
@@ -28,26 +24,7 @@ class Calculator
       transition :building_number => :waiting_for_new_number
     end
 
-    state :off do
-      def ac
-        turn_on
-        clear_everything
-      end
-
-      def digit_pressed(digit)
-        # NOOP
-      end
-
-      def backspace
-        # NOOP
-      end
-    end
-
     state :waiting_for_new_number do
-      def ac
-        clear_everything
-      end
-
       def digit_pressed(digit)
         clear_buffer
         @digits.add_digit(digit)
@@ -66,10 +43,6 @@ class Calculator
     end
 
     state :building_number do
-      def ac
-        clear_everything
-      end
-
       def digit_pressed(digit)
         @digits.add_digit(digit)
         update_display
@@ -86,6 +59,10 @@ class Calculator
         delete_digit
       end
     end
+  end
+
+  def ac
+    clear_everything
   end
 
   def c
@@ -130,12 +107,16 @@ class Calculator
   end
 
   def m_plus
+    operation_chosen(:do_nothing)
     @memory += @digits.to_number
+    update_display
     number_completed
   end
 
   def m_minus
+    operation_chosen(:do_nothing)
     @memory -= @digits.to_number
+    update_display
     number_completed
   end
 
