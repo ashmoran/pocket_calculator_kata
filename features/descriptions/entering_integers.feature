@@ -7,6 +7,8 @@ Feature: Entering numbers
     Given I have a pocket calculator
     And it is turned on
 
+  # Positive integers
+
   Scenario: A single digit
     Note: the display always shows a decimal point,
     even if we're entering an integer.
@@ -51,8 +53,22 @@ Feature: Entering numbers
       | *        |
       | /        |
 
+  # Negative integers
+
   Scenario: Entering a negative number
     When I press "1 2 3 +-"
+    Then the display shows "-123."
+
+  Scenario: Entering a negative number by pressing "+-" half way through
+    When I press "1 2 +- 3"
+    Then the display shows "-123."
+
+  Scenario: Entering a negative number and pressing "="
+    When I press "1 2 3 +- ="
+    Then the display shows "-123."
+
+  Scenario: Entering a negative number by pressing "+-" half way through, then pressing "="
+    When I press "1 2 +- 3 ="
     Then the display shows "-123."
 
   Scenario: Making a negative number positive
