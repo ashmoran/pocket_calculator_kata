@@ -171,11 +171,6 @@ describe Calculator do
         end
 
         example do
-          press 1, 2, 3, :point, 4, 5, :backspace
-          expect(display_contents).to be == "123.4"
-        end
-
-        example do
           press 1, 2, 3, :point, 4, :backspace, :backspace, 9
           expect(display_contents).to be == "129."
         end
