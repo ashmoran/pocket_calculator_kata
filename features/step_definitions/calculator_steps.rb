@@ -3,8 +3,12 @@ Given %r/^I have a pocket calculator$/ do
   @calculator = Calculator.new(display: @display)
 end
 
-When %r/^I press "(.*?)"$/ do |key|
-  press key
+Given %r/^it is turned on$/ do
+  press "AC"
+end
+
+When %r/^I press "(.*?)"$/ do |keys|
+  press(*keys.split(" "))
 end
 
 Then %r/^the display shows "(.*?)"$/ do |expected_display_contents|

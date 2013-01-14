@@ -52,13 +52,13 @@ describe Calculator do
         expect(display_contents).to be == "12."
       end
 
-      example do
+      example "maximum length" do
         press 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
 
         expect(display_contents).to be == "1234567890."
       end
 
-      example do
+      example "over maximum length" do
         press 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1
 
         expect(display_contents.length).to be == 11
@@ -67,7 +67,12 @@ describe Calculator do
 
       describe "equals" do
         example do
-          press 1, 2, 3, :eq, 4, 5, 6
+          press 1, 2, 3, :eq
+          expect(display_contents).to be == "123."
+
+          press 4
+          expect(display_contents).to be == "4."
+          press 5, 6
           expect(display_contents).to be == "456."
         end
       end
