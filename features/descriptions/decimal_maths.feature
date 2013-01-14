@@ -27,3 +27,13 @@ Feature: Decimal maths
   Scenario: Division with a long answer
     When I press "5 6 . 7 8 / 1 2 . 3 4 ="
     Then the display shows "4.601296596"
+
+  Scenario: Truncation
+    To one extra dp, the value of 1/7 is 0.1428571428, so
+    we check here that the value is truncated not rounded.
+
+    When I press "1 / 7 ="
+    Then the display shows "0.142857142"
+
+
+
