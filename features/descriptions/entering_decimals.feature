@@ -10,14 +10,17 @@ Feature: Entering decimals
     When I press "1 2 3 ."
     Then the display shows "123."
 
+  @decimal
   Scenario: Entering decimal places
     When I press "1 2 3 . 4 5"
     Then the display shows "123.45"
 
+  @decimal
   Scenario: Truncating trailing decimal zeros after equals
     When I press "1 2 3 . 0 1 0 ="
     Then the display shows "123.01"
 
+  @decimal
   Scenario Outline: Truncating trailing decimal zeros after an operator
     When I press "1 2 3 . 0 1 0 <operator>"
     Then the display shows "123.01"
@@ -29,6 +32,7 @@ Feature: Entering decimals
       | *        |
       | /        |
 
+  @decimal
   Scenario: Truncating trailing decimal zeros from an integer
     When I press "1 2 3 . 0 0 0 ="
     Then the display shows "123."

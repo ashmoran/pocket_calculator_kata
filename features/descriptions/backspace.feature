@@ -21,10 +21,12 @@ Feature: Backspace
     When I press "1 2 3 > > > >"
     Then the display shows "0."
 
+  @decimal
   Scenario: Deleting the last digit of a decimal
     When I press "1 2 3 . 4 5 >"
     Then the display shows "123.4"
 
+  @decimal
   Scenario: Changing the last digit of a decimal
     When I press "1 2 3 . 4 5 > 9"
     Then the display shows "123.49"
@@ -33,6 +35,7 @@ Feature: Backspace
     When I press "1 2 3 . 4 5 > >"
     Then the display shows "123."
 
+  @decimal
   Scenario: Changing all decimal places of a decimal
     When I press "1 2 3 . 4 5 > > 8 9"
     Then the display shows "123.89"

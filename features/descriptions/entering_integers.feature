@@ -24,6 +24,7 @@ Feature: Entering numbers
     When I press "1 2 3 4 5 6 7 8 9 0"
     Then the display shows "1234567890."
 
+  @long
   Scenario: A maximum-length integer
     The display has a 10-digit limit
 
@@ -55,18 +56,22 @@ Feature: Entering numbers
 
   # Negative integers
 
+  @negative
   Scenario: Entering a negative number
     When I press "1 2 3 +-"
     Then the display shows "-123."
 
+  @negative
   Scenario: Entering a negative number by pressing "+-" half way through
     When I press "1 2 +- 3"
     Then the display shows "-123."
 
+  @negative
   Scenario: Entering a negative number and pressing "="
     When I press "1 2 3 +- ="
     Then the display shows "-123."
 
+  @negative
   Scenario: Entering a negative number by pressing "+-" half way through, then pressing "="
     When I press "1 2 +- 3 ="
     Then the display shows "-123."
@@ -75,6 +80,7 @@ Feature: Entering numbers
     When I press "1 2 3 +- +-"
     Then the display shows "123."
 
+  @negative
   Scenario Outline: Pressing +- after an operator
     When I press "1 2 3 <operator> +-"
     Then the display shows "-123."
