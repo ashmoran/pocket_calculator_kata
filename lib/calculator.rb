@@ -107,17 +107,11 @@ class Calculator
   end
 
   def m_plus
-    operation_chosen(:do_nothing)
-    @memory += @digits.to_number
-    update_display
-    number_completed
+    accumulate_buffer_into_memory(:+)
   end
 
   def m_minus
-    operation_chosen(:do_nothing)
-    @memory -= @digits.to_number
-    update_display
-    number_completed
+    accumulate_buffer_into_memory(:-)
   end
 
   def mr
@@ -162,6 +156,13 @@ class Calculator
   def delete_digit
     @digits.delete_digit
     update_display
+  end
+
+  def accumulate_buffer_into_memory(operation)
+    operation_chosen(:do_nothing)
+    @memory = @memory.send(operation, @digits.to_number)
+    update_display
+    number_completed
   end
 
   # Operation implementations
