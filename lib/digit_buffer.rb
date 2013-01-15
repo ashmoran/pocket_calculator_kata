@@ -26,20 +26,20 @@ class DigitBuffer
       end
 
       def point
-        @digits << "0" if @digits.join.empty?
+        @digits << "0" if buffer_empty?
         super
       end
 
       def delete_digit
         @digits.pop
-        clear if empty?
+        clear if buffer_empty?
       end
 
       def to_s
-        if to_number != 0
+        if to_number.nonzero?
           "#{to_number.to_i}."
         else
-          if empty?
+          if buffer_empty?
             "0" + @digits.join + "."
           else
             @digits.join + "."
@@ -59,14 +59,14 @@ class DigitBuffer
 
       def delete_digit
         @digits.pop
-        clear if empty?
+        clear if buffer_empty?
       end
 
       def to_s
-        if to_number != 0
+        if to_number.nonzero?
           "#{to_number.to_i}."
         else
-          if empty?
+          if buffer_empty?
             "0" + @digits.join + "."
           else
             @digits.join + "."
@@ -86,7 +86,7 @@ class DigitBuffer
           @digits.pop
           integer_entered
         end
-        clear if empty?
+        clear if buffer_empty?
       end
 
       def to_s
@@ -108,7 +108,7 @@ class DigitBuffer
   end
 
   def toggle_sign
-    return if empty?
+    return if buffer_empty?
 
     if @digits.first == "-"
       @digits.shift
@@ -133,7 +133,7 @@ class DigitBuffer
 
   private
 
-  def empty?
+  def buffer_empty?
     @digits.none? { |digit| digit =~ /^[0-9]$/ }
   end
 
