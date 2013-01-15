@@ -32,6 +32,11 @@ class Calculator
         start_building_number
       end
 
+      def point
+        @digits.point
+        start_building_number
+      end
+
       def operation_chosen(next_operation)
         @next_operation = next_operation
       end
@@ -46,6 +51,10 @@ class Calculator
       def digit_pressed(digit)
         @digits.add_digit(digit)
         update_display
+      end
+
+      def point
+        @digits.point
       end
 
       def operation_chosen(operation)
@@ -74,10 +83,6 @@ class Calculator
     define_method(:"n#{digit}") do
       digit_pressed(digit.to_s)
     end
-  end
-
-  def point
-    @digits.point
   end
 
   def plus_minus

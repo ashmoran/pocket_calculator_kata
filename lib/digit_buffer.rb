@@ -36,6 +36,7 @@ class DigitBuffer
     state :point_pending do
       def add_digit(digit)
         unless full?
+          @digits << "0" if @digits.join =~ /^-?$/
           @digits << "."
           @digits << digit
         end

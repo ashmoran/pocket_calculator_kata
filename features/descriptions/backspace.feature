@@ -57,14 +57,6 @@ Feature: Backspace
     When I press "1 2 3 +- > > >"
     Then the display shows "0."
 
-  @negative
-  Scenario: Remove a negative number entirely, then press +-
-    Pressing +- doesn't add a minus sign if you haven't entered anything,
-    but it *does* add a minus sign if you have.
-
-    When I press "1 2 3 +- > > > +-"
-    Then the display shows "-0."
-
   Scenario: Performing a calculation after editing the last number
     Calculates 123 + 45
 

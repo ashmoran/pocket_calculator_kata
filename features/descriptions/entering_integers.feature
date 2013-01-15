@@ -1,4 +1,4 @@
-Feature: Entering numbers
+Feature: Entering integers
   It's important that the display shows the right thing as
   we enter numbers. We don't care here about any calculations,
   just that the display is updating correctly.
@@ -6,8 +6,6 @@ Feature: Entering numbers
   Background:
     Given I have a pocket calculator
     And it is turned on
-
-  # Positive integers
 
   Scenario: A single digit
     Note: the display always shows a decimal point,
@@ -46,46 +44,6 @@ Feature: Entering numbers
     Then the display shows "4."
     When I press "5 6"
     Then the display shows "456."
-
-    Examples:
-      | operator |
-      | +        |
-      | -        |
-      | *        |
-      | /        |
-
-  # Negative integers
-
-  @negative
-  Scenario: Entering a negative number
-    When I press "1 2 3 +-"
-    Then the display shows "-123."
-
-  @negative
-  Scenario: Entering a negative number by pressing "+-" half way through
-    When I press "1 2 +- 3"
-    Then the display shows "-123."
-
-  @negative
-  Scenario: Entering a negative number and pressing "="
-    When I press "1 2 3 +- ="
-    Then the display shows "-123."
-
-  @negative
-  Scenario: Entering a negative number by pressing "+-" half way through, then pressing "="
-    When I press "1 2 +- 3 ="
-    Then the display shows "-123."
-
-  Scenario: Making a negative number positive
-    When I press "1 2 3 +- +-"
-    Then the display shows "123."
-
-  @negative
-  Scenario Outline: Pressing +- after an operator
-    When I press "1 2 3 <operator> +-"
-    Then the display shows "-123."
-    When I press "7"
-    Then the display shows "7."
 
     Examples:
       | operator |

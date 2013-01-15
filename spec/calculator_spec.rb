@@ -132,6 +132,16 @@ describe Calculator do
         end
 
         example do
+          press 0, :point, 0, 0, 0
+          expect(display_contents).to be == "0.000"
+        end
+
+        example do
+          press :point, 0, 0, 0
+          expect(display_contents).to be == "0.000"
+        end
+
+        example do
           press 1, 2, 3, :point, 0, 1, 0, :eq
           expect(display_contents).to be == "123.01"
         end

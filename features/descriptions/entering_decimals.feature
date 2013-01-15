@@ -33,6 +33,13 @@ Feature: Entering decimals
       | /        |
 
   @decimal
+  Scenario: Pressing "." without entering a leading zero
+    It's like we pressed "0" first
+
+    When I press ". 0 0 0"
+    Then the display shows "0.000"
+
+  @decimal
   Scenario: Truncating trailing decimal zeros from an integer
     When I press "1 2 3 . 0 0 0 ="
     Then the display shows "123."

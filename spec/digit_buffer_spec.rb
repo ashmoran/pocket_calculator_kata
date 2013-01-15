@@ -50,8 +50,45 @@ describe DigitBuffer do
         }.to_not change { buffer.to_number }
       end
     end
+  end
 
-    describe "toggling the sign" do
+  describe "#toggle_sign" do
+    context "new buffer" do
+      specify {
+        buffer.toggle_sign
+        expect(buffer.to_number).to be == 0
+        expect(buffer.to_s).to be == "0."
+      }
+    end
+
+    context "with an explicit zero" do
+      before(:each) do
+        buffer.add_digit("0")
+      end
+
+      it "can be negated" do
+        expect(buffer.to_number).to be == 0
+        expect(buffer.to_s).to be == "-0."
+      end
+    end
+
+    context "after entering a decimal point" do
+      it "can be negated" do
+        buffer.point
+        buffer.toggle_sign
+
+        expect(buffer.to_number).to be == 0
+        expect(buffer.to_s).to be == "-0."
+      end
+    end
+
+    describe "with digits" do
+      before(:each) do
+        buffer.add_digit("1")
+        buffer.add_digit("2")
+        buffer.add_digit("3")
+      end
+
       specify {
         buffer.toggle_sign
         expect(buffer.to_number).to be == -123
@@ -64,6 +101,15 @@ describe DigitBuffer do
         expect(buffer.to_number).to be == 123
         expect(buffer.to_s).to be == "123."
       }
+
+      context "after clearing" do
+        it "reverts to new-buffer behaviour" do
+          buffer.clear
+          buffer.toggle_sign
+          expect(buffer.to_number).to be == 0
+          expect(buffer.to_s).to be == "0."
+        end
+      end
     end
   end
 
@@ -239,6 +285,27 @@ describe DigitBuffer do
 
         expect(buffer.to_number).to be == BigDecimal("1.2")
         expect(buffer.to_s).to be == "1.2"
+      end
+
+      example do
+        buffer.add_digit("0")
+        buffer.point
+        buffer.add_digit("0")
+        buffer.add_digit("0")
+        buffer.add_digit("0")
+
+        expect(buffer.to_number).to be == 0
+        expect(buffer.to_s).to be == "0.000"
+      end
+
+      example do
+        buffer.point
+        buffer.add_digit("0")
+        buffer.add_digit("0")
+        buffer.add_digit("0")
+
+        expect(buffer.to_number).to be == 0
+        expect(buffer.to_s).to be == "0.000"
       end
     end
 
