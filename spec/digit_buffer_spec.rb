@@ -323,6 +323,46 @@ describe DigitBuffer do
         expect(buffer.to_number).to be == 0
         expect(buffer.to_s).to be == "0.000"
       end
+
+      describe "deleting all of a negative number" do
+        example do
+          buffer.add_digit("0")
+          buffer.toggle_sign
+          buffer.delete_digit
+
+          expect(buffer.to_number).to be == 0
+          expect(buffer.to_s).to be == "0."
+        end
+
+        example do
+          buffer.point
+          buffer.toggle_sign
+          buffer.delete_digit
+
+          expect(buffer.to_number).to be == 0
+          expect(buffer.to_s).to be == "0."
+        end
+
+        example do
+          buffer.point
+          buffer.toggle_sign
+          buffer.delete_digit
+
+          expect(buffer.to_number).to be == 0
+          expect(buffer.to_s).to be == "0."
+        end
+
+        example do
+          buffer.point
+          buffer.add_digit("0")
+          buffer.toggle_sign
+          buffer.delete_digit
+          buffer.delete_digit
+
+          expect(buffer.to_number).to be == 0
+          expect(buffer.to_s).to be == "0."
+        end
+      end
     end
 
     describe "#read_in_number" do
