@@ -53,9 +53,8 @@ class DigitBuffer
         unless full?
           @digits << "."
           @digits << digit
+          decimal_entered
         end
-
-        decimal_entered
       end
 
       def delete_digit

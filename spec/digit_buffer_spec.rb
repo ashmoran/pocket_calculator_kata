@@ -227,6 +227,18 @@ describe DigitBuffer do
       expect(buffer.to_s).to be == "12.010"
     end
 
+    example "running out of space for decimal digits" do
+      buffer.add_digit("1")
+      buffer.add_digit("2")
+      buffer.add_digit("3")
+      buffer.add_digit("4")
+      buffer.add_digit("5")
+      buffer.point
+
+      expect(buffer.to_number).to be == 12345
+      expect(buffer.to_s).to be == "12345."
+    end
+
     describe "deleting digits" do
       example do
         buffer.add_digit("1")
