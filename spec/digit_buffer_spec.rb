@@ -239,7 +239,7 @@ describe DigitBuffer do
       expect(buffer.to_s).to be == "12345."
     end
 
-    describe "deleting digits", focus: true do
+    describe "deleting digits" do
       example do
         buffer.add_digit("1")
         buffer.add_digit("2")

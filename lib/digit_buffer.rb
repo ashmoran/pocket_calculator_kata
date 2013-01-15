@@ -20,9 +20,9 @@ class DigitBuffer
     end
 
     state :integer do
-      def add_digit(digit)
+      def __add_digit(digit)
         return if digit == "0" && explicit_integer_zero?
-        @digits << digit unless full?
+        @digits << digit
       end
 
       def point
@@ -30,8 +30,7 @@ class DigitBuffer
         super
       end
 
-      def delete_digit
-        @digits.pop
+      def _delete_digit(deleted_digit)
         clear if buffer_empty?
       end
 
@@ -49,16 +48,13 @@ class DigitBuffer
     end
 
     state :point_pending do
-      def add_digit(digit)
-        unless full?
-          @digits << "."
-          @digits << digit
-          decimal_entered
-        end
+      def __add_digit(digit)
+        @digits << "."
+        @digits << digit
+        decimal_entered
       end
 
-      def delete_digit
-        @digits.pop
+      def _delete_digit(deleted_digit)
         integer_entered
         clear if buffer_empty?
       end
@@ -77,14 +73,13 @@ class DigitBuffer
     end
 
     state :decimal do
-      def add_digit(digit)
-        @digits << digit unless full?
+      def __add_digit(digit)
+        @digits << digit
       end
 
-      def delete_digit
-        deleted_digit = @digits.pop
+      def _delete_digit(deleted_digit)
         if deleted_digit == "."
-          @digits.pop
+          delete_digit
           integer_entered
         end
         clear if buffer_empty?
@@ -92,6 +87,28 @@ class DigitBuffer
 
       def to_s
         @digits.join
+      end
+    end
+  end
+
+  state_machine :capacity, initial: :not_full do
+    event :filled_up do
+      transition :not_full => :full
+    end
+
+    event :buffer_capacity_freed do
+      transition :full => :not_full
+    end
+
+    state :not_full do
+      def _add_digit(digit)
+        __add_digit(digit)
+      end
+    end
+
+    state :full do
+      def _add_digit(digit)
+        # NOOP
       end
     end
   end
@@ -106,6 +123,16 @@ class DigitBuffer
   def clear
     @digits = [ ]
     super
+  end
+
+  def add_digit(digit)
+    _add_digit(digit)
+    check_buffer_state
+  end
+
+  def delete_digit
+    _delete_digit(@digits.pop)
+    check_buffer_state
   end
 
   def toggle_sign
@@ -134,11 +161,19 @@ class DigitBuffer
 
   private
 
+  def check_buffer_state
+    if buffer_full?
+      filled_up
+    else
+      buffer_capacity_freed
+    end
+  end
+
   def buffer_empty?
     @digits.none? { |digit| digit =~ /^[0-9]$/ }
   end
 
-  def full?
+  def buffer_full?
     @digits.select { |digit| digit =~ /^[0-9]$/ }.length >= @size
   end
 
