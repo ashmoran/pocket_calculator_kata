@@ -44,6 +44,15 @@ Feature: Memory
     When I press "MR"
     Then the display shows "877."
 
+  # Combined add and subtract
+
+  Scenario: Adding then subtracting the same amount
+    When I press "1 0 0 0 M+ AC"
+    When I press "1 2 3 M+ 1 2 3 M-"
+    Then the display shows "123."
+    When I press "MR"
+    Then the display shows "1000."
+
   # Mid-calculation
 
   Scenario: Adding to the memory mid-calculation

@@ -28,7 +28,7 @@ Feature: Decimal maths
     When I press "0 . 5 6 / 0 . 7 ="
     Then the display shows "0.8"
 
-  @decimal @long
+  @decimal @full
   Scenario: Truncation
     To one extra dp, the value of 1/7 is 0.1428571428, so
     we check here that the value is truncated not rounded.

@@ -24,7 +24,7 @@ Feature: Entering numbers
     When I press "1 2 3 4 5 6 7 8 9 0"
     Then the display shows "1234567890."
 
-  @long
+  @full
   Scenario: A maximum-length integer
     The display has a 10-digit limit
 

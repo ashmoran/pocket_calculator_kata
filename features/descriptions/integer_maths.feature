@@ -71,6 +71,12 @@ Feature: Integer maths
     When I press "1 2 3 + 6 7 +- ="
     Then the display shows "56."
 
+  Scenario: Negating zero
+    Pressing +- doesn't add a minus sign if you haven't entered anything
+
+    When I press "+-"
+    Then the display shows "0."
+
   Scenario: Pressing "+-" after an operator, but before the next number
     The calculator will negate the number on the display if you press +-
     after an operator, but this doesn't actually change the number you
