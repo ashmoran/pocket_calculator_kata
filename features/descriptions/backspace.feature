@@ -46,6 +46,12 @@ Feature: Backspace
     When I press "1 2 3 . 4 > > 9"
     Then the display shows "129."
 
+  Scenario: We didn't even mean to press "."
+    It's like that decimal place never existed
+
+    When I press "1 2 3 . > 9"
+    Then the display shows "129."
+
   @negative
   Scenario: Edit a negative number
     When I press "1 2 3 +- >"

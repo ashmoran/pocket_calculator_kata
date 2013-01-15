@@ -21,7 +21,7 @@ class DigitBuffer
 
     state :integer do
       def add_digit(digit)
-        return if digit == "0" && @digits.join =~ /^-?0$/
+        return if digit == "0" && explicit_integer_zero?
         @digits << digit unless full?
       end
 
@@ -36,14 +36,14 @@ class DigitBuffer
       end
 
       def to_s
-        if to_number.nonzero?
-          "#{to_number.to_i}."
-        else
+        if to_number.zero?
           if buffer_empty?
             "0" + @digits.join + "."
           else
             @digits.join + "."
           end
+        else
+          "#{to_number.to_i}."
         end
       end
     end
@@ -59,18 +59,19 @@ class DigitBuffer
 
       def delete_digit
         @digits.pop
+        integer_entered
         clear if buffer_empty?
       end
 
       def to_s
-        if to_number.nonzero?
-          "#{to_number.to_i}."
-        else
+        if to_number.zero?
           if buffer_empty?
             "0" + @digits.join + "."
           else
             @digits.join + "."
           end
+        else
+          "#{to_number.to_i}."
         end
       end
     end
@@ -139,6 +140,10 @@ class DigitBuffer
 
   def full?
     @digits.select { |digit| digit =~ /^[0-9]$/ }.length >= @size
+  end
+
+  def explicit_integer_zero?
+    @digits.join =~ /^-?0$/
   end
 
   def point_set?
