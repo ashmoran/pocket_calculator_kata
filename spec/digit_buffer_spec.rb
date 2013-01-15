@@ -8,6 +8,15 @@ describe DigitBuffer do
   context "new" do
     its(:to_number) { should be == 0 }
     its(:to_s) { should be == "0." }
+
+    it "can't have leading zeros" do
+      buffer.add_digit("0")
+      buffer.add_digit("0")
+      buffer.add_digit("0")
+
+      expect(buffer.to_number).to be == 0
+      expect(buffer.to_s).to be == "0."
+    end
   end
 
   context "with digits" do
@@ -54,31 +63,38 @@ describe DigitBuffer do
 
   describe "#toggle_sign" do
     context "new buffer" do
-      specify {
+      it "can't be negated" do
         buffer.toggle_sign
         expect(buffer.to_number).to be == 0
         expect(buffer.to_s).to be == "0."
-      }
-    end
-
-    context "with an explicit zero" do
-      before(:each) do
-        buffer.add_digit("0")
-      end
-
-      it "can be negated" do
-        expect(buffer.to_number).to be == 0
-        expect(buffer.to_s).to be == "-0."
       end
     end
 
-    context "after entering a decimal point" do
-      it "can be negated" do
-        buffer.point
-        buffer.toggle_sign
+    describe "negating zero" do
+      context "with an explicit zero" do
+        before(:each) do
+          buffer.add_digit("0")
+        end
 
-        expect(buffer.to_number).to be == 0
-        expect(buffer.to_s).to be == "-0."
+        it "can be negated" do
+          buffer.toggle_sign
+
+          expect(buffer.to_number).to be == 0
+          expect(buffer.to_s).to be == "-0."
+        end
+      end
+
+      context "after entering a decimal point" do
+        before(:each) do
+          buffer.point
+        end
+
+        it "can be negated" do
+          buffer.toggle_sign
+
+          expect(buffer.to_number).to be == 0
+          expect(buffer.to_s).to be == "-0."
+        end
       end
     end
 

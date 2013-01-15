@@ -21,7 +21,13 @@ class DigitBuffer
 
     state :integer do
       def add_digit(digit)
+        return if digit == "0" && @digits.join =~ /^-?0$/
         @digits << digit unless full?
+      end
+
+      def point
+        @digits << "0" if @digits.join.empty?
+        super
       end
 
       def delete_digit
@@ -29,14 +35,21 @@ class DigitBuffer
       end
 
       def to_s
-        "#{to_number.to_i}."
+        if to_number != 0
+          "#{to_number.to_i}."
+        else
+          if @digits.none? { |digit| digit =~ /^[0-9]$/ }
+            "0" + @digits.join + "."
+          else
+            @digits.join + "."
+          end
+        end
       end
     end
 
     state :point_pending do
       def add_digit(digit)
         unless full?
-          @digits << "0" if @digits.join =~ /^-?$/
           @digits << "."
           @digits << digit
         end
@@ -49,7 +62,15 @@ class DigitBuffer
       end
 
       def to_s
-        "#{to_number.to_i}."
+        if to_number != 0
+          "#{to_number.to_i}."
+        else
+          if @digits.none? { |digit| digit =~ /^[0-9]$/ }
+            "0" + @digits.join + "."
+          else
+            @digits.join + "."
+          end
+        end
       end
     end
 
@@ -85,6 +106,8 @@ class DigitBuffer
   end
 
   def toggle_sign
+    return if @digits.none? { |digit| digit =~ /^[0-9]$/ }
+
     if @digits.first == "-"
       @digits.shift
     else

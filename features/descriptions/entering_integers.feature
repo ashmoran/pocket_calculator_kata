@@ -51,3 +51,7 @@ Feature: Entering integers
       | -        |
       | *        |
       | /        |
+
+  Scenario: Trying to enter leading zeros
+    When I press "0 0 0"
+    Then the display shows "0."
