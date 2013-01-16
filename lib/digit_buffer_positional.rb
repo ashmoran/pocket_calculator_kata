@@ -8,7 +8,7 @@ class DigitBufferPositional
     end
 
     event :point do
-      transition [ :clean, :integer ]   => :point_pending
+      transition [ :clean, :zero, :integer ]   => :point_pending
     end
 
     event :decimal_entered do
@@ -57,7 +57,10 @@ class DigitBufferPositional
 
       end
 
-      # Why no point?
+      def point
+        @digits << "0"
+        super
+      end
 
       def to_s
         @sign + "0."

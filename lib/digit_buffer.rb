@@ -49,6 +49,11 @@ class DigitBuffer
 
       end
 
+      def point
+        @digits << "0" if buffer_empty?
+        super
+      end
+
       def to_s
         if buffer_empty?
           @sign + "0."

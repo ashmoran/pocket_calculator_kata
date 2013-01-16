@@ -399,6 +399,18 @@ shared_examples_for "a DigitBuffer" do
         expect(buffer.to_s).to be == "-0."
       end
 
+      example do
+        buffer.point
+        buffer.delete_digit
+        buffer.point
+        buffer.add_digit("1")
+        buffer.add_digit("2")
+        buffer.add_digit("3")
+
+        expect(buffer.to_number).to be == BigDecimal("0.123")
+        expect(buffer.to_s).to be == "0.123"
+      end
+
       describe "deleting all of a negative number" do
         example do
           buffer.add_digit("0")
@@ -445,7 +457,7 @@ shared_examples_for "a DigitBuffer" do
           buffer.delete_digit
           buffer.delete_digit
           buffer.add_digit("1")
-ap buffer.state
+
           expect(buffer.to_number).to be == 1
           expect(buffer.to_s).to be == "1."
         end
