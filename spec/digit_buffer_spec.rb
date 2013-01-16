@@ -443,6 +443,18 @@ describe DigitBuffer do
           expect(buffer.to_number).to be == 0
           expect(buffer.to_s).to be == "0."
         end
+
+        example "replacing the deleted number" do
+          buffer.point
+          buffer.add_digit("0")
+          buffer.toggle_sign
+          buffer.delete_digit
+          buffer.delete_digit
+          buffer.add_digit("1")
+
+          expect(buffer.to_number).to be == 1
+          expect(buffer.to_s).to be == "1."
+        end
       end
     end
 
