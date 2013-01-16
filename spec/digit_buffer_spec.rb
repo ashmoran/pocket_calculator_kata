@@ -349,6 +349,14 @@ describe DigitBuffer do
         expect(buffer.to_s).to be == "0.000"
       end
 
+      example do
+        buffer.delete_digit
+        buffer.toggle_sign
+
+        expect(buffer.to_number).to be == 0
+        expect(buffer.to_s).to be == "-0."
+      end
+
       describe "deleting all of a negative number" do
         example do
           buffer.add_digit("0")
