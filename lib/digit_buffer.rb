@@ -2,13 +2,13 @@ require 'bigdecimal'
 require 'state_machine'
 
 class DigitBuffer
-  state_machine initial: :integer do
+  state_machine initial: :clean do
     event :clear do
-      transition any => :integer
+      transition any => :clean
     end
 
     event :point do
-      transition :integer => :point_pending
+      transition [ :clean, :integer ]   => :point_pending
     end
 
     event :decimal_entered do
@@ -19,15 +19,30 @@ class DigitBuffer
       transition any => :integer
     end
 
+    state :clean do
+      def __add_digit(digit)
+        @digits << digit
+        integer_entered
+      end
+
+      def point
+        @digits << "0"
+        super
+      end
+
+      def _delete_digit(deleted_digit)
+
+      end
+
+      def to_s
+        "0."
+      end
+    end
+
     state :integer do
       def __add_digit(digit)
         return if trying_to_add_leading_zero?(digit)
         @digits << digit
-      end
-
-      def point
-        @digits << "0" if buffer_empty?
-        super
       end
 
       def _delete_digit(deleted_digit)
@@ -128,12 +143,12 @@ class DigitBuffer
 
   def add_digit(digit)
     _add_digit(digit)
-    check_buffer_state
+    check_buffer_capacity
   end
 
   def delete_digit
     _delete_digit(@digits.pop)
-    check_buffer_state
+    check_buffer_capacity
   end
 
   def toggle_sign
@@ -160,7 +175,7 @@ class DigitBuffer
 
   private
 
-  def check_buffer_state
+  def check_buffer_capacity
     if buffer_full?
       filled_up
     else
@@ -178,10 +193,6 @@ class DigitBuffer
 
   def digits_in_buffer
     @digits.select { |digit| digit =~ /^[0-9]$/ }
-  end
-
-  def point_set?
-    @digits.include?(".")
   end
 
   def read_in_integer_digits(digit_string)
