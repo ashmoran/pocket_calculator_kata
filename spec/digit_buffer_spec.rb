@@ -187,6 +187,15 @@ describe DigitBuffer do
       its(:to_s) { should be == "123." }
     end
 
+    context "an integer BigDecimal with a trailing zero" do
+      before(:each) do
+        buffer.read_in_number(BigDecimal("1230"))
+      end
+
+      its(:to_number) { should be == BigDecimal("1230") }
+      its(:to_s) { should be == "1230." }
+    end
+
     context "a fractional BigDecimal" do
       before(:each) do
         buffer.read_in_number(BigDecimal("12.3"))
@@ -194,6 +203,15 @@ describe DigitBuffer do
 
       its(:to_number) { should be == BigDecimal("12.3") }
       its(:to_s) { should be == "12.3" }
+    end
+
+    context "a fractional BigDecimal with leading zeros" do
+      before(:each) do
+        buffer.read_in_number(BigDecimal("0.0123"))
+      end
+
+      its(:to_number) { should be == BigDecimal("0.0123") }
+      its(:to_s) { should be == "0.0123" }
     end
 
     context "a negative BigDecimal" do
