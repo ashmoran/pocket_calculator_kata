@@ -21,7 +21,7 @@ class DigitBuffer
 
     state :integer do
       def __add_digit(digit)
-        return if digit == "0" && explicit_integer_zero?
+        return if trying_to_add_leading_zero?(digit)
         @digits << digit
       end
 
@@ -44,6 +44,12 @@ class DigitBuffer
         else
           "#{to_number.to_i}."
         end
+      end
+
+      private
+
+      def trying_to_add_leading_zero?(digit)
+        digit == "0" && @digits == %w[ 0 ]
       end
     end
 
@@ -172,10 +178,6 @@ class DigitBuffer
 
   def digits_in_buffer
     @digits.select { |digit| digit =~ /^[0-9]$/ }
-  end
-
-  def explicit_integer_zero?
-    @digits == %w[ 0 ]
   end
 
   def point_set?
