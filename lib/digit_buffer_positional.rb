@@ -57,14 +57,7 @@ class DigitBufferPositional
       end
 
       def to_s
-        # We have a fake "zero" state, like clean but it can have a sign
-        if buffer_empty?
-          @sign + "0."
-        else
-          digits = @digits.dup
-          digits.insert(-@exponent, ".")
-          @sign + digits.join
-        end
+        _to_s
       end
 
       private
@@ -86,7 +79,7 @@ class DigitBufferPositional
       end
 
       def to_s
-        @sign + @digits.join + "."
+        _to_s
       end
     end
 
@@ -102,9 +95,7 @@ class DigitBufferPositional
       end
 
       def to_s
-        digits = @digits.dup
-        digits.insert(-@exponent, ".")
-        @sign + digits.join
+        _to_s
       end
     end
   end
@@ -184,6 +175,17 @@ class DigitBufferPositional
   end
 
   private
+
+  def _to_s
+    # We have a fake "zero" state, like clean but it can have a sign
+    if buffer_empty?
+      @sign + "0."
+    else
+      digits = @digits.dup
+      digits.insert(-@exponent, ".")
+      @sign + digits.join
+    end
+  end
 
   def ensure_not_empty
     if buffer_empty?
