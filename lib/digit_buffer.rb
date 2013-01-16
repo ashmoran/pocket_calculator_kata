@@ -50,11 +50,7 @@ class DigitBuffer
       end
 
       def to_s
-        if to_number.zero?
-          (@sign + @digits.join + ".").lstrip
-        else
-          "#{to_number.to_i}."
-        end
+        @sign + @digits.join + "."
       end
 
       private
@@ -76,11 +72,7 @@ class DigitBuffer
       end
 
       def to_s
-        if to_number.zero?
-          (@sign + @digits.join + ".").lstrip
-        else
-          "#{to_number.to_i}."
-        end
+        @sign + @digits.join + "."
       end
     end
 
@@ -97,7 +89,7 @@ class DigitBuffer
       end
 
       def to_s
-        @digits.join
+        @sign + @digits.join
       end
     end
   end
@@ -132,7 +124,7 @@ class DigitBuffer
   end
 
   def clear
-    @sign = " "
+    @sign = ""
     @digits = [ ]
     super
   end
@@ -149,10 +141,10 @@ class DigitBuffer
   end
 
   def toggle_sign
-    if @sign == " "
+    if @sign == ""
       @sign = "-"
     else
-      @sign = " "
+      @sign = ""
     end
   end
 
@@ -175,7 +167,7 @@ class DigitBuffer
   def ensure_not_empty
     if buffer_empty?
       @digits << "0"
-      @sign = " "
+      @sign = ""
     end
   end
 
