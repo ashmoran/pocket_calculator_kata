@@ -96,6 +96,20 @@ describe DigitBuffer do
           expect(buffer.to_s).to be == "-0."
         end
       end
+
+      context "decimal zero" do
+        before(:each) do
+          buffer.point
+          buffer.add_digit("0")
+        end
+
+        it "can be negated" do
+          buffer.toggle_sign
+
+          expect(buffer.to_number).to be == 0
+          expect(buffer.to_s).to be == "-0.0"
+        end
+      end
     end
 
     describe "with digits" do
@@ -180,6 +194,22 @@ describe DigitBuffer do
 
       its(:to_number) { should be == BigDecimal("12.3") }
       its(:to_s) { should be == "12.3" }
+    end
+
+    context "a negative BigDecimal" do
+      before(:each) do
+        buffer.read_in_number(BigDecimal("-12.3"))
+      end
+
+      its(:to_number) { should be == BigDecimal("-12.3") }
+      its(:to_s) { should be == "-12.3" }
+
+      it "can have its sign toggled" do
+        buffer.toggle_sign
+
+        expect(buffer.to_number).to be == BigDecimal("12.3")
+        expect(buffer.to_s).to be == "12.3"
+      end
     end
   end
 

@@ -151,15 +151,20 @@ class DigitBuffer
   def read_in_number(number)
     clear
     number = BigDecimal(number)
-    read_in_integer_digits(number.fix.to_i.to_s)
-    if number.frac.nonzero?
-      point
-      read_in_integer_digits(number.frac.to_s("F")[2..-1])
+
+    number.abs.tap do |abs_number|
+      read_in_integer_digits(abs_number.fix.to_i.to_s)
+      if number.frac.nonzero?
+        point
+        read_in_integer_digits(abs_number.frac.to_s("F")[2..-1])
+      end
     end
+
+    toggle_sign if number < 0
   end
 
   def to_number
-    BigDecimal(@sign + @digits.join)
+    BigDecimal(to_s)
   end
 
   private
