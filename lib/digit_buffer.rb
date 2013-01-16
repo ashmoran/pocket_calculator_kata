@@ -50,7 +50,6 @@ class DigitBuffer
       end
 
       def to_s
-        # We have a fake "zero" state, like clean but it can have a sign
         if buffer_empty?
           @sign + "0."
         else
