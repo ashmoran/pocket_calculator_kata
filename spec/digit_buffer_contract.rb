@@ -445,7 +445,7 @@ shared_examples_for "a DigitBuffer" do
           buffer.delete_digit
           buffer.delete_digit
           buffer.add_digit("1")
-
+ap buffer.state
           expect(buffer.to_number).to be == 1
           expect(buffer.to_s).to be == "1."
         end

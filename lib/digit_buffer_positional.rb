@@ -23,6 +23,10 @@ class DigitBufferPositional
       transition any => :integer
     end
 
+    event :zero_entered do
+      transition any => :zero
+    end
+
     state :clean do
       def __add_digit(digit)
         @digits << digit
@@ -35,11 +39,28 @@ class DigitBufferPositional
       end
 
       def _delete_digit(deleted_digit)
-        integer_entered
+        zero_entered
       end
 
       def to_s
         "0."
+      end
+    end
+
+    state :zero do
+      def __add_digit(digit)
+        @digits << digit
+        integer_entered
+      end
+
+      def _delete_digit(deleted_digit)
+
+      end
+
+      # Why no point?
+
+      def to_s
+        @sign + "0."
       end
     end
 
@@ -140,7 +161,10 @@ class DigitBufferPositional
 
   def delete_digit
     _delete_digit(@digits.pop)
-    @sign = "" if buffer_empty?
+    if buffer_empty?
+      @sign = ""
+      zero_entered
+    end
     check_buffer_capacity
   end
 
@@ -174,14 +198,9 @@ class DigitBufferPositional
   private
 
   def _to_s
-    # We have a fake "zero" state, like clean but it can have a sign
-    if buffer_empty?
-      @sign + "0."
-    else
-      digits = @digits.dup
-      digits.insert(-@exponent, ".")
-      @sign + digits.join
-    end
+    digits = @digits.dup
+    digits.insert(-@exponent, ".")
+    @sign + digits.join
   end
 
   def ensure_not_empty
