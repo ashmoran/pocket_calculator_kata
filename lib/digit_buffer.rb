@@ -31,7 +31,7 @@ class DigitBuffer
       end
 
       def _delete_digit(deleted_digit)
-        # clear if buffer_empty?
+
       end
 
       def to_s
@@ -56,16 +56,11 @@ class DigitBuffer
 
       def _delete_digit(deleted_digit)
         integer_entered
-        clear if buffer_empty?
       end
 
       def to_s
         if to_number.zero?
-          if buffer_empty?
-            "0" + @digits.join + "."
-          else
-            (@sign + @digits.join + ".").lstrip
-          end
+          (@sign + @digits.join + ".").lstrip
         else
           "#{to_number.to_i}."
         end
@@ -82,7 +77,6 @@ class DigitBuffer
           delete_digit
           integer_entered
         end
-        clear if buffer_empty?
       end
 
       def to_s
@@ -137,8 +131,6 @@ class DigitBuffer
   end
 
   def toggle_sign
-    return if buffer_empty?
-
     if @sign == " "
       @sign = "-"
     else
