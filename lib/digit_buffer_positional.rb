@@ -26,18 +26,15 @@ class DigitBufferPositional
     state :clean do
       def __add_digit(digit)
         @digits << digit
-        @exponent = 1
         integer_entered
       end
 
       def point
         @digits << "0"
-        @exponent = 1
         super
       end
 
       def _delete_digit(deleted_digit)
-        @exponent = 1
         integer_entered
       end
 
@@ -131,7 +128,7 @@ class DigitBufferPositional
 
   def clear
     @sign     = ""
-    @exponent = 0
+    @exponent = 1
     @digits   = [ ]
     super
   end
