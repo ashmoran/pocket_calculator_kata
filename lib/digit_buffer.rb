@@ -31,7 +31,7 @@ class DigitBuffer
       end
 
       def _delete_digit(deleted_digit)
-        clear if buffer_empty?
+        # clear if buffer_empty?
       end
 
       def to_s
@@ -39,7 +39,7 @@ class DigitBuffer
           if buffer_empty?
             "0" + @digits.join + "."
           else
-            @digits.join + "."
+            (@sign + @digits.join + ".").lstrip
           end
         else
           "#{to_number.to_i}."
@@ -64,7 +64,7 @@ class DigitBuffer
           if buffer_empty?
             "0" + @digits.join + "."
           else
-            @digits.join + "."
+            (@sign + @digits.join + ".").lstrip
           end
         else
           "#{to_number.to_i}."
@@ -121,6 +121,7 @@ class DigitBuffer
   end
 
   def clear
+    @sign = " "
     @digits = [ ]
     super
   end
@@ -138,10 +139,10 @@ class DigitBuffer
   def toggle_sign
     return if buffer_empty?
 
-    if @digits.first == "-"
-      @digits.shift
+    if @sign == " "
+      @sign = "-"
     else
-      @digits.unshift("-")
+      @sign = " "
     end
   end
 
@@ -156,7 +157,7 @@ class DigitBuffer
   end
 
   def to_number
-    BigDecimal(@digits.join)
+    BigDecimal(@sign + @digits.join)
   end
 
   private
@@ -170,15 +171,19 @@ class DigitBuffer
   end
 
   def buffer_empty?
-    @digits.none? { |digit| digit =~ /^[0-9]$/ }
+    digits_in_buffer.empty?
   end
 
   def buffer_full?
-    @digits.select { |digit| digit =~ /^[0-9]$/ }.length >= @size
+    digits_in_buffer.length >= @size
+  end
+
+  def digits_in_buffer
+    @digits.select { |digit| digit =~ /^[0-9]$/ }
   end
 
   def explicit_integer_zero?
-    @digits.join =~ /^-?0$/
+    @digits == %w[ 0 ]
   end
 
   def point_set?
