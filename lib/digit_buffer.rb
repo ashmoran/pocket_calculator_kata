@@ -92,7 +92,7 @@ class DigitBuffer
     @sign     = ""
     @exponent = 1
     @digits   = [ ]
-    ensure_not_empty
+    ensure_buffer_contains_at_least_zero
     super
   end
 
@@ -102,14 +102,12 @@ class DigitBuffer
 
   def delete_digit
     _delete_digit(@digits.pop)
-    if empty?
-      @sign = ""
-    end
-    ensure_not_empty
+    @sign = "" if empty?
+    ensure_buffer_contains_at_least_zero
   end
 
   def point
-    ensure_not_empty
+    ensure_buffer_contains_at_least_zero
     super
   end
 
@@ -119,7 +117,7 @@ class DigitBuffer
 
   private
 
-  def ensure_not_empty
+  def ensure_buffer_contains_at_least_zero
     @digits << "0" if empty?
   end
 
