@@ -150,12 +150,12 @@ class DigitBuffer
   end
 
   def add_digit(digit)
-    _add_digit(digit) unless buffer_full?
+    _add_digit(digit) unless full?
   end
 
   def delete_digit
     _delete_digit(@digits.pop)
-    if buffer_empty?
+    if empty?
       @sign = ""
       empty_but_dirty_entered
     end
@@ -181,11 +181,11 @@ class DigitBuffer
     @sign + digits.join
   end
 
-  def buffer_empty?
+  def empty?
     @digits.empty?
   end
 
-  def buffer_full?
+  def full?
     @digits.length >= @size
   end
 end
