@@ -68,7 +68,7 @@ class DigitBuffer
       end
 
       def _delete_digit(deleted_digit)
-
+        # NOOP
       end
 
       def point
@@ -88,7 +88,7 @@ class DigitBuffer
       end
 
       def _delete_digit(deleted_digit)
-
+        # NOOP
       end
 
       def to_s
