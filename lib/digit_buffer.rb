@@ -1,7 +1,19 @@
 require 'bigdecimal'
 require 'state_machine'
 
+class DigitBuffer; end
+
+require_relative 'digit_buffer/decorators'
+
 class DigitBuffer
+  class << self
+    def new(*args)
+      buffer = allocate
+      buffer.send(:initialize, *args)
+      Decorators::Typist.new(buffer)
+    end
+  end
+
   state_machine initial: :clean do
     event :clear do
       transition any => :clean
@@ -155,21 +167,6 @@ class DigitBuffer
     end
   end
 
-  def read_in_number(number)
-    clear
-
-    number = BigDecimal(number)
-    integer_digits, decimal_digits = number.abs.to_s("F").split(".")
-
-    read_in_integer_digits(integer_digits)
-    if number.frac.nonzero?
-      point
-      read_in_integer_digits(decimal_digits)
-    end
-
-    toggle_sign if number < 0
-  end
-
   def to_number
     BigDecimal(to_s)
   end
@@ -188,11 +185,5 @@ class DigitBuffer
 
   def buffer_full?
     @digits.length >= @size
-  end
-
-  def read_in_integer_digits(digit_string)
-    digit_string.chars.each do |digit|
-      add_digit(digit)
-    end
   end
 end
