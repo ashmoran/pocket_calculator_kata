@@ -28,7 +28,7 @@ class DigitBufferPositional
     end
 
     state :clean do
-      def __add_digit(digit)
+      def _add_digit(digit)
         @digits << digit
         integer_entered
       end
@@ -48,7 +48,7 @@ class DigitBufferPositional
     end
 
     state :zero do
-      def __add_digit(digit)
+      def _add_digit(digit)
         @digits << digit
         integer_entered
       end
@@ -68,7 +68,7 @@ class DigitBufferPositional
     end
 
     state :integer do
-      def __add_digit(digit)
+      def _add_digit(digit)
         return if trying_to_add_leading_zero?(digit)
         @digits << digit
       end
@@ -89,7 +89,7 @@ class DigitBufferPositional
     end
 
     state :point_pending do
-      def __add_digit(digit)
+      def _add_digit(digit)
         @digits << digit
         @exponent += 1
         decimal_entered
@@ -105,7 +105,7 @@ class DigitBufferPositional
     end
 
     state :decimal do
-      def __add_digit(digit)
+      def _add_digit(digit)
         @digits << digit
         @exponent += 1
       end
@@ -117,28 +117,6 @@ class DigitBufferPositional
 
       def to_s
         _to_s
-      end
-    end
-  end
-
-  state_machine :capacity, initial: :not_full do
-    event :filled_up do
-      transition :not_full => :full
-    end
-
-    event :buffer_capacity_freed do
-      transition :full => :not_full
-    end
-
-    state :not_full do
-      def _add_digit(digit)
-        __add_digit(digit)
-      end
-    end
-
-    state :full do
-      def _add_digit(digit)
-        # NOOP
       end
     end
   end
@@ -158,8 +136,7 @@ class DigitBufferPositional
   end
 
   def add_digit(digit)
-    _add_digit(digit)
-    check_buffer_capacity
+    _add_digit(digit) unless buffer_full?
   end
 
   def delete_digit
@@ -168,7 +145,6 @@ class DigitBufferPositional
       @sign = ""
       zero_entered
     end
-    check_buffer_capacity
   end
 
   def toggle_sign
@@ -204,14 +180,6 @@ class DigitBufferPositional
     digits = @digits.dup
     digits.insert(-@exponent, ".")
     @sign + digits.join
-  end
-
-  def check_buffer_capacity
-    if buffer_full?
-      filled_up
-    else
-      buffer_capacity_freed
-    end
   end
 
   def buffer_empty?
