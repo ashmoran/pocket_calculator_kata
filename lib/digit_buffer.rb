@@ -47,19 +47,12 @@ class DigitBuffer
 
     state :integer do
       def _add_digit(digit)
-        return if trying_to_add_leading_zero?(digit)
         @digits.shift if @digits == %w[ 0 ]
         @digits << digit
       end
 
       def _delete_digit(deleted_digit)
         # NOOP
-      end
-
-      private
-
-      def trying_to_add_leading_zero?(digit)
-        digit == "0" && @digits == %w[ 0 ]
       end
     end
 
