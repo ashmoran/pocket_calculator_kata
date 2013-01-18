@@ -4,6 +4,14 @@ require 'state_machine'
 
 class DigitBuffer
   module Decorators
+    # The calculator has the questionable feature that if you press +-
+    # as the first key, it doesn't toggle the sign. If you do anything
+    # that makes the display "dirty" you then can toggle the sign.
+    #
+    # Arguably this behaviour is a bug, but my first attempt at
+    # implementing it massively complicated the DigitBuffer. Extracting
+    # it to a decorator at least allows us to isolate the weirdness.
+
     class ScreenProtector
       state_machine initial: :clean do
         event :became_dirty do

@@ -3,9 +3,16 @@ require 'bigdecimal'
 
 class DigitBuffer
   module Decorators
+    # Typist decorates a DigitBuffer with the ability to type in
+    # a number from a numeric value. This is useful because it
+    # guarantees we're putting the buffer in the correct state
+    # (integer or decimal). It lets us do it by sending simple
+    # instructions to the buffer rather than doing state
+    # inference afterwards, which means this can be implemented
+    # outside the buffer itself.
+
     class Typist
       extend Forwardable
-
       def_delegators :@buffer, *DigitBuffer::PROTOCOL
 
       def initialize(buffer)

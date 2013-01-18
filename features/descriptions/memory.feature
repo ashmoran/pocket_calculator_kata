@@ -75,3 +75,13 @@ Feature: Memory
     Then the display shows "579."
     When I press "MR"
     Then the display shows "210."
+
+  # Memory recall
+
+  Scenario: Memory recall
+    Recalling an empty memory doesn't let you toggle the sign
+
+    When I press "MR AC +-"
+    Then the display shows "0."
+
+
