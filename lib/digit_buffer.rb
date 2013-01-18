@@ -1,7 +1,9 @@
 require 'bigdecimal'
 require 'state_machine'
 
-class DigitBuffer; end
+class DigitBuffer
+  PROTOCOL = [ :clear, :add_digit, :delete_digit, :point, :toggle_sign, :to_number, :to_s ]
+end
 
 require_relative 'digit_buffer/decorators'
 

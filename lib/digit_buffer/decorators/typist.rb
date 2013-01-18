@@ -6,8 +6,7 @@ class DigitBuffer
     class Typist
       extend Forwardable
 
-      def_delegators :@buffer,
-        :clear, :add_digit, :delete_digit, :point, :toggle_sign, :to_number, :to_s
+      def_delegators :@buffer, *DigitBuffer::PROTOCOL
 
       def initialize(buffer)
         @buffer = buffer
