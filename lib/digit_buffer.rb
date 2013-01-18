@@ -8,15 +8,23 @@ class DigitBuffer
     end
 
     event :point do
-      transition [ :clean, :integer ]   => :point_pending
+      transition [ :clean, :empty_but_dirty, :integer ]   => :point_pending
     end
 
     event :decimal_entered do
-      transition any => :decimal
+      transition :point_pending => :decimal
+    end
+
+    event :point_pending_entered do
+      transition [ :integer, :decimal ] => :point_pending
     end
 
     event :integer_entered do
-      transition any => :integer
+      transition [ :clean, :empty_but_dirty, :point_pending ] => :integer
+    end
+
+    event :empty_but_dirty_entered do
+      transition [ :clean, :integer ] => :empty_but_dirty
     end
 
     state :clean do
@@ -31,11 +39,31 @@ class DigitBuffer
       end
 
       def _delete_digit(deleted_digit)
-        integer_entered
+        empty_but_dirty_entered
       end
 
       def to_s
         "0."
+      end
+    end
+
+    state :empty_but_dirty do
+      def _add_digit(digit)
+        @digits << digit
+        integer_entered
+      end
+
+      def _delete_digit(deleted_digit)
+
+      end
+
+      def point
+        @digits << "0"
+        super
+      end
+
+      def to_s
+        @sign + "0."
       end
     end
 
@@ -49,17 +77,8 @@ class DigitBuffer
 
       end
 
-      def point
-        @digits << "0" if buffer_empty?
-        super
-      end
-
       def to_s
-        if buffer_empty?
-          @sign + "0."
-        else
-          @sign + @digits.join + "."
-        end
+        _to_s
       end
 
       private
@@ -71,8 +90,8 @@ class DigitBuffer
 
     state :point_pending do
       def _add_digit(digit)
-        @digits << "."
         @digits << digit
+        @exponent += 1
         decimal_entered
       end
 
@@ -81,24 +100,23 @@ class DigitBuffer
       end
 
       def to_s
-        @sign + @digits.join + "."
+        _to_s
       end
     end
 
     state :decimal do
       def _add_digit(digit)
         @digits << digit
+        @exponent += 1
       end
 
       def _delete_digit(deleted_digit)
-        if deleted_digit == "."
-          delete_digit
-          integer_entered
-        end
+        @exponent -= 1
+        point_pending_entered if @exponent == 1
       end
 
       def to_s
-        @sign + @digits.join
+        _to_s
       end
     end
   end
@@ -111,8 +129,9 @@ class DigitBuffer
   end
 
   def clear
-    @sign = ""
-    @digits = [ ]
+    @sign     = ""
+    @exponent = 1
+    @digits   = [ ]
     super
   end
 
@@ -122,7 +141,10 @@ class DigitBuffer
 
   def delete_digit
     _delete_digit(@digits.pop)
-    @sign = "" if buffer_empty?
+    if buffer_empty?
+      @sign = ""
+      empty_but_dirty_entered
+    end
   end
 
   def toggle_sign
@@ -154,31 +176,18 @@ class DigitBuffer
 
   private
 
-  def ensure_not_empty
-    if buffer_empty?
-      @digits << "0"
-      @sign = ""
-    end
-  end
-
-  def check_buffer_capacity
-    if buffer_full?
-      filled_up
-    else
-      buffer_capacity_freed
-    end
+  def _to_s
+    digits = @digits.dup
+    digits.insert(-@exponent, ".")
+    @sign + digits.join
   end
 
   def buffer_empty?
-    digits_in_buffer.empty?
+    @digits.empty?
   end
 
   def buffer_full?
-    digits_in_buffer.length >= @size
-  end
-
-  def digits_in_buffer
-    @digits.select { |digit| digit =~ /^[0-9]$/ }
+    @digits.length >= @size
   end
 
   def read_in_integer_digits(digit_string)
