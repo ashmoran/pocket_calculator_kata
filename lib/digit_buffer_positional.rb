@@ -183,15 +183,11 @@ class DigitBufferPositional
   end
 
   def buffer_empty?
-    digits_in_buffer.empty?
+    @digits.empty?
   end
 
   def buffer_full?
-    digits_in_buffer.length >= @size
-  end
-
-  def digits_in_buffer
-    @digits.select { |digit| digit =~ /^[0-9]$/ }
+    @digits.length >= @size
   end
 
   def read_in_integer_digits(digit_string)
