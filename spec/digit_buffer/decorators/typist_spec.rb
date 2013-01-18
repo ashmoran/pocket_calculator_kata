@@ -11,7 +11,7 @@ class DigitBuffer
 
       describe "#read_in_number" do
         context "a BigDecimal" do
-          context "integer" do
+          context "positive integer" do
             let(:number) { BigDecimal("123") }
 
             it "reads in the digits" do
@@ -21,12 +21,13 @@ class DigitBuffer
               buffer.should_receive(:add_digit).with("2").ordered
               buffer.should_receive(:add_digit).with("3").ordered
               buffer.should_not_receive(:point)
+              buffer.should_not_receive(:toggle_sign)
 
               typist.read_in_number(number)
             end
           end
 
-          context "decimal" do
+          context "positive decimal" do
             let(:number) { BigDecimal("1.23") }
 
             it "reads in the digits" do
@@ -36,12 +37,45 @@ class DigitBuffer
               buffer.should_receive(:point).ordered
               buffer.should_receive(:add_digit).with("2").ordered
               buffer.should_receive(:add_digit).with("3").ordered
+              buffer.should_not_receive(:toggle_sign)
 
               typist.read_in_number(number)
             end
           end
 
-          context "decimal < 0" do
+          context "negative integer" do
+            let(:number) { BigDecimal("-123") }
+
+            it "reads in the digits" do
+              buffer.should_receive(:clear).ordered
+
+              buffer.should_receive(:add_digit).with("1").ordered
+              buffer.should_receive(:add_digit).with("2").ordered
+              buffer.should_receive(:add_digit).with("3").ordered
+              buffer.should_receive(:toggle_sign).ordered
+              buffer.should_not_receive(:point)
+
+              typist.read_in_number(number)
+            end
+          end
+
+          context "negative decimal" do
+            let(:number) { BigDecimal("-1.23") }
+
+            it "reads in the digits" do
+              buffer.should_receive(:clear).ordered
+
+              buffer.should_receive(:add_digit).with("1").ordered
+              buffer.should_receive(:point).ordered
+              buffer.should_receive(:add_digit).with("2").ordered
+              buffer.should_receive(:add_digit).with("3").ordered
+              buffer.should_receive(:toggle_sign).ordered
+
+              typist.read_in_number(number)
+            end
+          end
+
+          context "0 < decimal < 1" do
             let(:number) { BigDecimal("0.0123") }
 
             it "reads in the digits" do
@@ -53,6 +87,7 @@ class DigitBuffer
               buffer.should_receive(:add_digit).with("1").ordered
               buffer.should_receive(:add_digit).with("2").ordered
               buffer.should_receive(:add_digit).with("3").ordered
+              buffer.should_not_receive(:toggle_sign)
 
               typist.read_in_number(number)
             end
@@ -66,6 +101,7 @@ class DigitBuffer
 
               buffer.should_receive(:add_digit).with("0").ordered
               buffer.should_not_receive(:point)
+              buffer.should_not_receive(:toggle_sign)
 
               typist.read_in_number(number)
             end
@@ -73,7 +109,7 @@ class DigitBuffer
         end
 
         context "a String" do
-          let(:number) { "000.012300" }
+          let(:number) { "-000.012300" }
 
           it "reads in the digits as if it was a BigDecimal" do
             buffer.should_receive(:clear).ordered
@@ -84,6 +120,7 @@ class DigitBuffer
             buffer.should_receive(:add_digit).with("1").ordered
             buffer.should_receive(:add_digit).with("2").ordered
             buffer.should_receive(:add_digit).with("3").ordered
+            buffer.should_receive(:toggle_sign).ordered
 
             typist.read_in_number(number)
           end

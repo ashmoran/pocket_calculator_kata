@@ -22,7 +22,7 @@ class DigitBuffer
     end
 
     event :point do
-      transition [ :clean, :empty_but_dirty, :integer ]   => :point_pending
+      transition [ :clean, :integer ]   => :point_pending
     end
 
     event :decimal_entered do
@@ -34,11 +34,7 @@ class DigitBuffer
     end
 
     event :integer_entered do
-      transition [ :clean, :empty_but_dirty, :point_pending ] => :integer
-    end
-
-    event :empty_but_dirty_entered do
-      transition [ :clean, :integer ] => :empty_but_dirty
+      transition [ :clean, :point_pending ] => :integer
     end
 
     state :clean do
@@ -47,48 +43,34 @@ class DigitBuffer
         integer_entered
       end
 
-      def point
-        @digits << "0"
-        super
-      end
-
       def _delete_digit(deleted_digit)
-        empty_but_dirty_entered
-      end
-
-      def to_s
-        "0."
-      end
-    end
-
-    state :empty_but_dirty do
-      def _add_digit(digit)
-        @digits << digit
         integer_entered
       end
 
-      def _delete_digit(deleted_digit)
+      def toggle_sign
         # NOOP
       end
 
-      def point
-        @digits << "0"
-        super
-      end
-
       def to_s
-        @sign + "0."
+        # Nope, we need to make sure the sign can't change...
+        # _to_s
+        "0."
       end
     end
 
     state :integer do
       def _add_digit(digit)
         return if trying_to_add_leading_zero?(digit)
+        @digits.shift if @digits == %w[ 0 ]
         @digits << digit
       end
 
       def _delete_digit(deleted_digit)
         # NOOP
+      end
+
+      def toggle_sign
+        _toggle_sign
       end
 
       def to_s
@@ -113,6 +95,10 @@ class DigitBuffer
         integer_entered
       end
 
+      def toggle_sign
+        _toggle_sign
+      end
+
       def to_s
         _to_s
       end
@@ -127,6 +113,10 @@ class DigitBuffer
       def _delete_digit(deleted_digit)
         @exponent -= 1
         point_pending_entered if @exponent == 1
+      end
+
+      def toggle_sign
+        _toggle_sign
       end
 
       def to_s
@@ -157,16 +147,13 @@ class DigitBuffer
     _delete_digit(@digits.pop)
     if empty?
       @sign = ""
-      empty_but_dirty_entered
     end
+    ensure_not_empty
   end
 
-  def toggle_sign
-    if @sign == ""
-      @sign = "-"
-    else
-      @sign = ""
-    end
+  def point
+    ensure_not_empty
+    super
   end
 
   def to_number
@@ -174,6 +161,18 @@ class DigitBuffer
   end
 
   private
+
+  def ensure_not_empty
+    @digits << "0" if empty?
+  end
+
+  def _toggle_sign
+    if @sign == ""
+      @sign = "-"
+    else
+      @sign = ""
+    end
+  end
 
   def _to_s
     digits = @digits.dup

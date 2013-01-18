@@ -24,7 +24,7 @@ class DigitBuffer
           read_in_integer_digits(decimal_digits)
         end
 
-        toggle_sign if number < 0
+        @buffer.toggle_sign if number < 0
       end
 
       private
