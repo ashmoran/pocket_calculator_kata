@@ -111,16 +111,6 @@ class DigitBuffer
     super
   end
 
-  def to_number
-    BigDecimal(to_s)
-  end
-
-  private
-
-  def ensure_buffer_contains_at_least_zero
-    @digits << "0" if empty?
-  end
-
   def toggle_sign
     if @sign == ""
       @sign = "-"
@@ -129,10 +119,20 @@ class DigitBuffer
     end
   end
 
+  def to_number
+    BigDecimal(to_s)
+  end
+
   def to_s
     digits = @digits.dup
     digits.insert(-@exponent, ".")
     @sign + digits.join
+  end
+
+  private
+
+  def ensure_buffer_contains_at_least_zero
+    @digits << "0" if empty?
   end
 
   def empty?
