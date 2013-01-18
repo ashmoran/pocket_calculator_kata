@@ -2,7 +2,9 @@ require 'bigdecimal'
 require 'state_machine'
 
 class DigitBuffer
-  PROTOCOL = [ :clear, :add_digit, :delete_digit, :point, :toggle_sign, :to_number, :to_s ]
+  PROTOCOL = [
+    :clear, :add_digit, :delete_digit, :point, :toggle_sign, :to_number, :to_s , :read_in_number
+  ]
 end
 
 require_relative 'digit_buffer/decorators'
@@ -12,7 +14,13 @@ class DigitBuffer
     def new(*args)
       buffer = allocate
       buffer.send(:initialize, *args)
-      Decorators::Typist.new(buffer)
+
+      # The order of this nesting matters, and it's interesting why
+      Decorators::Typist.new(
+        Decorators::ScreenProtector.new(
+          buffer
+        )
+      )
     end
   end
 
