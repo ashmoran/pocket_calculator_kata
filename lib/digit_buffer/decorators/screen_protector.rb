@@ -23,18 +23,18 @@ class DigitBuffer
           end
 
           def add_digit(digit)
-            became_dirty
             @buffer.add_digit(digit)
+            became_dirty
           end
 
           def delete_digit
-            became_dirty
             @buffer.delete_digit
+            became_dirty
           end
 
           def point
-            became_dirty
             @buffer.point
+            became_dirty
           end
         end
 
@@ -43,8 +43,8 @@ class DigitBuffer
           def_delegators :@buffer, *DigitBuffer::PROTOCOL
 
           def clear
-            became_clean
             @buffer.clear
+            became_clean
           end
         end
       end

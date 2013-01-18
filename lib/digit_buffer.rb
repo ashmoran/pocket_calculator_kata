@@ -24,13 +24,13 @@ class DigitBuffer
     end
   end
 
-  state_machine initial: :clean do
+  state_machine initial: :integer do
     event :clear do
-      transition any => :clean
+      transition any => :integer
     end
 
     event :point do
-      transition [ :clean, :integer ]   => :point_pending
+      transition :integer => :point_pending
     end
 
     event :decimal_entered do
@@ -42,28 +42,7 @@ class DigitBuffer
     end
 
     event :integer_entered do
-      transition [ :clean, :point_pending ] => :integer
-    end
-
-    state :clean do
-      def _add_digit(digit)
-        @digits << digit
-        integer_entered
-      end
-
-      def _delete_digit(deleted_digit)
-        integer_entered
-      end
-
-      def toggle_sign
-        # NOOP
-      end
-
-      def to_s
-        # Nope, we need to make sure the sign can't change...
-        # _to_s
-        "0."
-      end
+      transition :point_pending => :integer
     end
 
     state :integer do
@@ -79,10 +58,6 @@ class DigitBuffer
 
       def toggle_sign
         _toggle_sign
-      end
-
-      def to_s
-        _to_s
       end
 
       private
@@ -106,10 +81,6 @@ class DigitBuffer
       def toggle_sign
         _toggle_sign
       end
-
-      def to_s
-        _to_s
-      end
     end
 
     state :decimal do
@@ -126,10 +97,6 @@ class DigitBuffer
       def toggle_sign
         _toggle_sign
       end
-
-      def to_s
-        _to_s
-      end
     end
   end
 
@@ -144,6 +111,7 @@ class DigitBuffer
     @sign     = ""
     @exponent = 1
     @digits   = [ ]
+    ensure_not_empty
     super
   end
 
@@ -182,7 +150,7 @@ class DigitBuffer
     end
   end
 
-  def _to_s
+  def to_s
     digits = @digits.dup
     digits.insert(-@exponent, ".")
     @sign + digits.join
