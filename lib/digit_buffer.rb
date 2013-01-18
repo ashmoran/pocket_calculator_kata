@@ -20,7 +20,7 @@ class DigitBuffer
     end
 
     state :clean do
-      def __add_digit(digit)
+      def _add_digit(digit)
         @digits << digit
         integer_entered
       end
@@ -40,7 +40,7 @@ class DigitBuffer
     end
 
     state :integer do
-      def __add_digit(digit)
+      def _add_digit(digit)
         return if trying_to_add_leading_zero?(digit)
         @digits << digit
       end
@@ -70,7 +70,7 @@ class DigitBuffer
     end
 
     state :point_pending do
-      def __add_digit(digit)
+      def _add_digit(digit)
         @digits << "."
         @digits << digit
         decimal_entered
@@ -86,7 +86,7 @@ class DigitBuffer
     end
 
     state :decimal do
-      def __add_digit(digit)
+      def _add_digit(digit)
         @digits << digit
       end
 
@@ -99,28 +99,6 @@ class DigitBuffer
 
       def to_s
         @sign + @digits.join
-      end
-    end
-  end
-
-  state_machine :capacity, initial: :not_full do
-    event :filled_up do
-      transition :not_full => :full
-    end
-
-    event :buffer_capacity_freed do
-      transition :full => :not_full
-    end
-
-    state :not_full do
-      def _add_digit(digit)
-        __add_digit(digit)
-      end
-    end
-
-    state :full do
-      def _add_digit(digit)
-        # NOOP
       end
     end
   end
@@ -139,14 +117,12 @@ class DigitBuffer
   end
 
   def add_digit(digit)
-    _add_digit(digit)
-    check_buffer_capacity
+    _add_digit(digit) unless buffer_full?
   end
 
   def delete_digit
     _delete_digit(@digits.pop)
     @sign = "" if buffer_empty?
-    check_buffer_capacity
   end
 
   def toggle_sign
