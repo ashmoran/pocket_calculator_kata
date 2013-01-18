@@ -12,19 +12,19 @@ class DigitBufferPositional
     end
 
     event :decimal_entered do
-      transition any => :decimal
+      transition :point_pending => :decimal
     end
 
     event :point_pending_entered do
-      transition any => :point_pending
+      transition [ :integer, :decimal ] => :point_pending
     end
 
     event :integer_entered do
-      transition any => :integer
+      transition [ :clean, :empty_but_dirty, :point_pending ] => :integer
     end
 
     event :empty_but_dirty_entered do
-      transition any => :empty_but_dirty
+      transition [ :clean, :integer ] => :empty_but_dirty
     end
 
     state :clean do
