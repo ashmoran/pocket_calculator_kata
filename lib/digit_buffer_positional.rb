@@ -206,13 +206,6 @@ class DigitBufferPositional
     @sign + digits.join
   end
 
-  def ensure_not_empty
-    if buffer_empty?
-      @digits << "0"
-      @sign = ""
-    end
-  end
-
   def check_buffer_capacity
     if buffer_full?
       filled_up
