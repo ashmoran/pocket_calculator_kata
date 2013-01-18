@@ -1,18 +1,27 @@
-require 'delegate'
+require 'forwardable'
 require 'bigdecimal'
 
 class DigitBuffer
   module Decorators
-    class Typist < SimpleDelegator
+    class Typist
+      extend Forwardable
+
+      def_delegators :@buffer,
+        :clear, :add_digit, :delete_digit, :point, :toggle_sign, :to_number, :to_s
+
+      def initialize(buffer)
+        @buffer = buffer
+      end
+
       def read_in_number(number)
-        clear
+        @buffer.clear
 
         number = BigDecimal.new(number)
         integer_digits, decimal_digits = split_number(number)
 
         read_in_integer_digits(integer_digits)
         if number.frac.nonzero?
-          point
+          @buffer.point
           read_in_integer_digits(decimal_digits)
         end
 
@@ -27,7 +36,7 @@ class DigitBuffer
 
       def read_in_integer_digits(digit_string)
         digit_string.chars.each do |digit|
-          add_digit(digit)
+          @buffer.add_digit(digit)
         end
       end
     end
