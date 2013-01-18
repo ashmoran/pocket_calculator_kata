@@ -8,7 +8,7 @@ class DigitBufferPositional
     end
 
     event :point do
-      transition [ :clean, :zero, :integer ]   => :point_pending
+      transition [ :clean, :empty_but_dirty, :integer ]   => :point_pending
     end
 
     event :decimal_entered do
@@ -23,8 +23,8 @@ class DigitBufferPositional
       transition any => :integer
     end
 
-    event :zero_entered do
-      transition any => :zero
+    event :empty_but_dirty_entered do
+      transition any => :empty_but_dirty
     end
 
     state :clean do
@@ -39,7 +39,7 @@ class DigitBufferPositional
       end
 
       def _delete_digit(deleted_digit)
-        zero_entered
+        empty_but_dirty_entered
       end
 
       def to_s
@@ -47,7 +47,7 @@ class DigitBufferPositional
       end
     end
 
-    state :zero do
+    state :empty_but_dirty do
       def _add_digit(digit)
         @digits << digit
         integer_entered
@@ -143,7 +143,7 @@ class DigitBufferPositional
     _delete_digit(@digits.pop)
     if buffer_empty?
       @sign = ""
-      zero_entered
+      empty_but_dirty_entered
     end
   end
 
