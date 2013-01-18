@@ -56,10 +56,6 @@ class DigitBuffer
         # NOOP
       end
 
-      def toggle_sign
-        _toggle_sign
-      end
-
       private
 
       def trying_to_add_leading_zero?(digit)
@@ -77,10 +73,6 @@ class DigitBuffer
       def _delete_digit(deleted_digit)
         integer_entered
       end
-
-      def toggle_sign
-        _toggle_sign
-      end
     end
 
     state :decimal do
@@ -92,10 +84,6 @@ class DigitBuffer
       def _delete_digit(deleted_digit)
         @exponent -= 1
         point_pending_entered if @exponent == 1
-      end
-
-      def toggle_sign
-        _toggle_sign
       end
     end
   end
@@ -142,7 +130,7 @@ class DigitBuffer
     @digits << "0" if empty?
   end
 
-  def _toggle_sign
+  def toggle_sign
     if @sign == ""
       @sign = "-"
     else
