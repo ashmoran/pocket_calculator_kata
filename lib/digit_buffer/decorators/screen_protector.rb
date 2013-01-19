@@ -11,6 +11,9 @@ class DigitBuffer
     # Arguably this behaviour is a bug, but my first attempt at
     # implementing it massively complicated the DigitBuffer. Extracting
     # it to a decorator at least allows us to isolate the weirdness.
+    # It also means if Casio ever fix this "bug", we can fix it here
+    # by simply removing the ScreenProtector object from the decorator
+    # chain.
 
     class ScreenProtector
       extend Forwardable
