@@ -2,6 +2,12 @@ require 'spec_helper'
 
 require 'calculator'
 
+# NOTE: The examples in this file don't cover everything in the
+# Gherkin features. I started this file first and translated them
+# into the authoritative Gherkin, so there's not a lot of point to
+# this file now other than a reference of an alternative form of
+# specification of the behaviour.
+
 module MockDisplay
   def update(contents)
     @displayed_values << contents
