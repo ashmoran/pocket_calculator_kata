@@ -4,7 +4,7 @@ require 'state_machine'
 
 class DigitBuffer
   module Decorators
-    # The calculator has the questionable feature that if you press +-
+    # The calculator has the questionable feature that if you press +/-
     # as the first key, it doesn't toggle the sign. If you do anything
     # that makes the display "dirty" you then can toggle the sign.
     #

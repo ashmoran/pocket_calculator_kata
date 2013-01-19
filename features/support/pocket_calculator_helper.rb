@@ -7,7 +7,7 @@ module PocketCalculatorHelper
     "-"  => :minus,
     "*"  => :times,
     "/"  => :divide_by,
-    "+-" => :plus_minus,
+    "+/-" => :plus_minus,
     "M+" => :m_plus,
     "M-" => :m_minus,
     "MR" => :mr,
