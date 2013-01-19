@@ -23,6 +23,8 @@ class DigitBuffer
         @buffer.clear
 
         number = BigDecimal.new(number)
+        return if number == 0
+
         integer_digits, decimal_digits = split_number(number)
 
         read_in_integer_digits(integer_digits)

@@ -419,6 +419,13 @@ describe Calculator do
           expect(display_contents).to be == "0."
         end
       end
+
+      describe "trying to store zero" do
+        it "doesn't let you" do
+          press 0, :m_plus, :ac, :mr, :plus_minus
+          expect(display_contents).to be == "0."
+        end
+      end
     end
   end
 end

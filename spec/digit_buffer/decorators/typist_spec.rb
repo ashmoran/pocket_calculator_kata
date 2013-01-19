@@ -94,16 +94,32 @@ class DigitBuffer
           end
 
           context "0" do
-            let(:number) { BigDecimal("0") }
+            context "as a BigDecimal" do
+              let(:number) { BigDecimal("0") }
 
-            it "currently reads in the zero (I'm not sure if this is correct)" do
-              buffer.should_receive(:clear).ordered
+              it "currently reads in the zero" do
+                buffer.should_receive(:clear)
 
-              buffer.should_receive(:add_digit).with("0").ordered
-              buffer.should_not_receive(:point)
-              buffer.should_not_receive(:toggle_sign)
+                buffer.should_not_receive(:add_digit)
+                buffer.should_not_receive(:point)
+                buffer.should_not_receive(:toggle_sign)
 
-              typist.read_in_number(number)
+                typist.read_in_number(number)
+              end
+            end
+
+            context "as a String" do
+              let(:number) { "0" }
+
+              it "currently reads in the zero" do
+                buffer.should_receive(:clear)
+
+                buffer.should_not_receive(:add_digit)
+                buffer.should_not_receive(:point)
+                buffer.should_not_receive(:toggle_sign)
+
+                typist.read_in_number(number)
+              end
             end
           end
         end
