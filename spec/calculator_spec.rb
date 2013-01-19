@@ -330,6 +330,11 @@ describe Calculator do
               1, 2, :point, 3, 4, :eq
         expect(display_contents).to be == "4.601296596"
       end
+
+      example "square root" do
+        press 1, 0, 1, :sqrt
+        expect(display_contents).to be == "10.04987562"
+      end
     end
 
     describe "memory" do

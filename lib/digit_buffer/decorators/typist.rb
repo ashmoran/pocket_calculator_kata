@@ -1,5 +1,6 @@
 require 'forwardable'
 require 'bigdecimal'
+require 'bigdecimal/util'
 
 class DigitBuffer
   module Decorators
@@ -22,7 +23,7 @@ class DigitBuffer
       def read_in_number(number)
         @buffer.clear
 
-        number = BigDecimal.new(number)
+        number = number.to_d
         return if number == 0
 
         integer_digits, decimal_digits = split_number(number)

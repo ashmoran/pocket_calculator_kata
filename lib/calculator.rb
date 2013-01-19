@@ -106,6 +106,11 @@ class Calculator
     operation_chosen(:do_divide_by)
   end
 
+  def square_root
+    @digits.read_in_number(Math.sqrt(@digits.to_number))
+    update_display
+  end
+
   def equals
     operation_chosen(:do_nothing)
     update_display

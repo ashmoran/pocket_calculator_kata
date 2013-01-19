@@ -141,6 +141,22 @@ class DigitBuffer
             typist.read_in_number(number)
           end
         end
+
+        context "a Float" do
+          let(:number) { -0.25 }
+
+          it "reads in the digits as if it was a BigDecimal" do
+            buffer.should_receive(:clear).ordered
+
+            buffer.should_receive(:add_digit).with("0").ordered
+            buffer.should_receive(:point).ordered
+            buffer.should_receive(:add_digit).with("2").ordered
+            buffer.should_receive(:add_digit).with("5").ordered
+            buffer.should_receive(:toggle_sign).ordered
+
+            typist.read_in_number(number)
+          end
+        end
       end
     end
   end

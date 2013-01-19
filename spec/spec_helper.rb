@@ -9,6 +9,7 @@ module PocketCalculatorHelper
     :-          => :minus,
     :*          => :times,
     :/          => :divide_by,
+    :sqrt       => :square_root,
     :plus_minus => :plus_minus,
     :m_plus     => :m_plus,
     :m_minus    => :m_minus,
